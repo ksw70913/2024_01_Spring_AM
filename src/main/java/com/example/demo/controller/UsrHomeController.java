@@ -11,4 +11,28 @@ public class UsrHomeController {
 	public String showMain() {
 		return "안녕";
 	}
+
+	@RequestMapping("/usr/home/main2")
+	@ResponseBody
+	public String showMain2() {
+		return "잘가";
+	}
+
+	@RequestMapping("/usr/home/main3")
+	@ResponseBody
+	public int showMain3() {
+		int a = 1;
+		int b = 2;
+		return a + b;
+	}
+
+	int i = -1;
+
+	@RequestMapping("/usr/home/main4")
+	@ResponseBody
+	public int showMain4() {
+		i++;
+		return i;
+	}
+
 }
