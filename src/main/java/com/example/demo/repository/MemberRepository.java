@@ -43,4 +43,26 @@ public interface MemberRepository {
 	@Select("SELECT * FROM `member` WHERE id = #{id}")
 	public Member getMember(int id);
 
+	@Select("""
+			SELECT count(*)
+			FROM `member`
+			WHERE loginId = #{loginId}
+			""")
+	public int checkLoginId(String loginId);
+
+	@Select("""
+			SELECT loginPw
+			FROM `member`
+			WHERE loginId = #{loginId}
+			""")
+	public String checkLoginPw(String loginId);
+
+	@Select("""
+			SELECT *
+			FROM `member`
+			WHERE loginId = #{loginId}
+			AND loginPw = #{loginPw}
+			""")
+	public Member getMemberRow(String loginId, String loginPw);
+
 }

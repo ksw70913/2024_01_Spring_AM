@@ -11,7 +11,7 @@ import com.example.demo.vo.Member;
 
 @Controller
 public class UsrMemberController {
-
+	int isLogined = 0;
 	@Autowired
 	private MemberService memberService;
 
@@ -51,5 +51,29 @@ public class UsrMemberController {
 		Member member = memberService.getMember(id);
 
 		return member;
+	}
+
+	@RequestMapping("/usr/member/doLogin")
+	@ResponseBody
+	public Object doLogin(String loginId, String loginPw) {
+		if (memberService.checkLoginId(loginId) == 0) {
+			return "아이디가 올바르지 않습니다.";
+		}
+		if (!memberService.checkLoginPw(loginId).equals(loginPw)) {
+			return "비밀번호가 올바르지 않습니다.";
+		}
+		Member member = memberService.getMemberRow(loginId, loginPw);
+
+		isLogined = 1;
+
+		return member.getNickname() + "님 환영합니다!";
+	}
+
+	@RequestMapping("/usr/member/doLogout")
+	@ResponseBody
+	public String doLogout() {
+		Member member = null;
+		isLogined = 0;
+		return "로그아웃 되었습니다.";
 	}
 }
