@@ -11,6 +11,20 @@ CREATE TABLE article(
     `body` TEXT NOT NULL
 );
 
+# member 테이블 생성
+CREATE TABLE `member`(
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    loginId CHAR(100) NOT NULL,
+    loginPw CHAR(200) NOT NULL,
+    `name` CHAR(100) NOT NULL,
+    nickname CHAR(100) NOT NULL,
+    cellphoneNum CHAR(100) NOT NULL,
+    email CHAR(100) NOT NULL
+);
+
+
 # article TD 생성
 INSERT INTO article
 SET regDate = NOW(),
@@ -21,8 +35,8 @@ title = '제목1',
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
-title = '제목222',
-`body` = '내용222';
+title = '제목2',
+`body` = '내용2';
 
 INSERT INTO article
 SET regDate = NOW(),
@@ -30,8 +44,27 @@ updateDate = NOW(),
 title = '제목3',
 `body` = '내용3';
 
+# member TD 생성
+INSERT INTO `member`
+SET regDate = NOW(),
+loginId = 'test1',
+loginPw = 'test1',
+`name` = '회원1';
+
+INSERT INTO `member`
+SET regDate = NOW(),
+loginId = 'test2',
+loginPw = 'test2',
+`name` = '회원2';
+
+INSERT INTO `member`
+SET regDate = NOW(),
+loginId = 'test3',
+loginPw = 'test3',
+`name` = '회원3';
 
 SELECT *
 FROM article;
 
-SELECT LAST_INSERT_ID();
+SELECT *
+FROM `member`;
