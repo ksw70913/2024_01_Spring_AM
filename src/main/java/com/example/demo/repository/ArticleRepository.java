@@ -18,8 +18,8 @@ public interface ArticleRepository {
 			article SET
 			regDate = NOW(),
 			updateDate = NOW(),
+			memberId = #{memberId},
 			title = #{title}, `body` = #{body}
-			memberId = #{memberId}
 			""")
 	public void writeArticle(int memberId, String title, String body);
 

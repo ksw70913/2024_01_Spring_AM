@@ -81,11 +81,35 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public ResultData<Integer> doModify(int id, String title, String body) {
+	public ResultData<Integer> doModify(HttpSession httpSession, int id, String title, String body) {
+
+		boolean isLogined = false;
+
+		if (httpSession.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+		}
+
+		if (isLogined == false) {
+			return ResultData.from("F-A", "로그인하고 이용해 주세요.");
+		}
+
+		int memberId = (int) httpSession.getAttribute("loginedMemberId");
+		int memberAuthLevel = (int) httpSession.getAttribute("loginedMemberAuthLevel");
+
 		Article article = articleService.getArticle(id);
 
 		if (article == null) {
 			return ResultData.from("F-1", Ut.f("%d번 글은 존재하지 않습니다", id), id);
+		}
+
+		if (memberAuthLevel == 7) {
+			articleService.modifyArticle(id, title, body);
+
+			return ResultData.from("S-1", Ut.f("%d번 글을 수정했습니다", id), id);
+		}
+
+		else if (article.getMemberId() != memberId) {
+			return ResultData.from("F-2", Ut.f("%d번 글은 다른 작성자가 쓴 글입니다.", id), id);
 		}
 
 		articleService.modifyArticle(id, title, body);
@@ -95,12 +119,35 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public ResultData<Integer> doDelete(int id) {
+	public ResultData<Integer> doDelete(HttpSession httpSession, int id) {
+
+		boolean isLogined = false;
+
+		if (httpSession.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+		}
+
+		if (isLogined == false) {
+			return ResultData.from("F-A", "로그인하고 이용해 주세요.");
+		}
+
+		int memberId = (int) httpSession.getAttribute("loginedMemberId");
+		int memberAuthLevel = (int) httpSession.getAttribute("loginedMemberAuthLevel");
 
 		Article article = articleService.getArticle(id);
 
 		if (article == null) {
 			return ResultData.from("F-1", Ut.f("%d번 글은 존재하지 않습니다", id), id);
+		}
+
+		if (memberAuthLevel == 7) {
+			articleService.deleteArticle(id);
+
+			return ResultData.from("S-1", Ut.f("%d번 글이 삭제 되었습니다", id), id);
+		}
+
+		else if (article.getMemberId() != memberId) {
+			return ResultData.from("F-2", Ut.f("%d번 글은 다른 작성자가 쓴 글입니다.", id), id);
 		}
 
 		articleService.deleteArticle(id);

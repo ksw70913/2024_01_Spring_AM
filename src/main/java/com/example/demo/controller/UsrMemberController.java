@@ -50,6 +50,7 @@ public class UsrMemberController {
 		}
 
 		httpSession.setAttribute("loginedMemberId", member.getId());
+		httpSession.setAttribute("loginedMemberAuthLevel", member.getAuthLevel());
 
 		return ResultData.from("S-1", Ut.f("%s님 환영합니다", member.getNickname()));
 	}
@@ -70,6 +71,7 @@ public class UsrMemberController {
 
 		isLogined = false;
 		httpSession.removeAttribute("loginedMemberId");
+		httpSession.removeAttribute("loginedMemberAuthLevel");
 
 		return ResultData.from("S-1", "로그아웃 되었습니다.");
 	}
