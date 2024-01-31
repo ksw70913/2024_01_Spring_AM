@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ArticleService;
-import com.example.demo.service.MemberService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
-import com.example.demo.vo.Member;
 import com.example.demo.vo.ResultData;
 
 import jakarta.servlet.http.HttpSession;
@@ -52,16 +50,16 @@ public class UsrArticleController {
 	public ResultData<Article> doWrite(HttpSession httpSession, String title, String body) {
 
 		boolean isLogined = false;
+		int loginedMemberId = 0;
 
 		if (httpSession.getAttribute("loginedMemberId") != null) {
 			isLogined = true;
+			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
 		}
 
 		if (isLogined == false) {
-			return ResultData.from("F-A", "로그인하고 이용해 주세요.");
+			return ResultData.from("F-A", "로그인 후 이용해주세요");
 		}
-
-		int memberId = (int) httpSession.getAttribute("loginedMemberId");
 
 		if (Ut.isNullOrEmpty(title)) {
 			return ResultData.from("F-1", "제목을 입력해주세요");
@@ -70,7 +68,7 @@ public class UsrArticleController {
 			return ResultData.from("F-2", "내용을 입력해주세요");
 		}
 
-		ResultData<Integer> writeArticleRd = articleService.writeArticle(memberId, title, body);
+		ResultData<Integer> writeArticleRd = articleService.writeArticle(loginedMemberId, title, body);
 
 		int id = (int) writeArticleRd.getData1();
 
@@ -79,22 +77,22 @@ public class UsrArticleController {
 		return ResultData.newData(writeArticleRd, article);
 	}
 
+	// 로그인 체크 -> 유무 체크 -> 권한 체크 -> 수정
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
 	public ResultData<Integer> doModify(HttpSession httpSession, int id, String title, String body) {
 
 		boolean isLogined = false;
+		int loginedMemberId = 0;
 
 		if (httpSession.getAttribute("loginedMemberId") != null) {
 			isLogined = true;
+			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
 		}
 
 		if (isLogined == false) {
-			return ResultData.from("F-A", "로그인하고 이용해 주세요.");
+			return ResultData.from("F-A", "로그인 후 이용해주세요");
 		}
-
-		int memberId = (int) httpSession.getAttribute("loginedMemberId");
-		int memberAuthLevel = (int) httpSession.getAttribute("loginedMemberAuthLevel");
 
 		Article article = articleService.getArticle(id);
 
@@ -102,52 +100,37 @@ public class UsrArticleController {
 			return ResultData.from("F-1", Ut.f("%d번 글은 존재하지 않습니다", id), id);
 		}
 
-		if (memberAuthLevel == 7) {
-			articleService.modifyArticle(id, title, body);
-
-			return ResultData.from("S-1", Ut.f("%d번 글을 수정했습니다", id), id);
-		}
-
-		else if (article.getMemberId() != memberId) {
-			return ResultData.from("F-2", Ut.f("%d번 글은 다른 작성자가 쓴 글입니다.", id), id);
-		}
+		ResultData loginedMemberCanModifyRd = articleService.loginedMemberCanModify(loginedMemberId, article);
 
 		articleService.modifyArticle(id, title, body);
 
-		return ResultData.from("S-1", Ut.f("%d번 글을 수정했습니다", id), id);
+		return ResultData.from(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg(), id);
 	}
 
+	// 로그인 체크 -> 유무 체크 -> 권한 체크 -> 삭제
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
 	public ResultData<Integer> doDelete(HttpSession httpSession, int id) {
 
 		boolean isLogined = false;
+		int loginedMemberId = 0;
 
 		if (httpSession.getAttribute("loginedMemberId") != null) {
 			isLogined = true;
+			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
 		}
 
 		if (isLogined == false) {
-			return ResultData.from("F-A", "로그인하고 이용해 주세요.");
+			return ResultData.from("F-A", "로그인 후 이용해주세요");
 		}
-
-		int memberId = (int) httpSession.getAttribute("loginedMemberId");
-		int memberAuthLevel = (int) httpSession.getAttribute("loginedMemberAuthLevel");
-
 		Article article = articleService.getArticle(id);
 
 		if (article == null) {
 			return ResultData.from("F-1", Ut.f("%d번 글은 존재하지 않습니다", id), id);
 		}
 
-		if (memberAuthLevel == 7) {
-			articleService.deleteArticle(id);
-
-			return ResultData.from("S-1", Ut.f("%d번 글이 삭제 되었습니다", id), id);
-		}
-
-		else if (article.getMemberId() != memberId) {
-			return ResultData.from("F-2", Ut.f("%d번 글은 다른 작성자가 쓴 글입니다.", id), id);
+		if (article.getMemberId() != loginedMemberId) {
+			return ResultData.from("F-2", Ut.f("%d번 글에 대한 권한이 없습니다", id), id);
 		}
 
 		articleService.deleteArticle(id);
