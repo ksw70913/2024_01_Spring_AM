@@ -57,10 +57,10 @@ public class UsrMemberController {
 			return ResultData.from("F-1", "이미 로그인 중입니다.");
 		}
 		if (memberService.checkLoginId(loginId) == 0) {
-			return ResultData.from("F-2", Ut.f("%s(아이디)가 올바르지 않습니다..", loginId));
+			return ResultData.from("F-2", Ut.f("%s(아이디)가 올바르지 않습니다.", loginId));
 		}
-		if (!memberService.checkLoginPw(loginId).equals(loginPw)) {
-			return ResultData.from("F-3", Ut.f("%s(비밀번호)가 올바르지 않습니다..", loginPw));
+		if (!memberService.checkLoginPw(loginId).equals(loginPw) || memberService.checkLoginPw(loginId) == null) {
+			return ResultData.from("F-3", Ut.f("%s(비밀번호)가 올바르지 않습니다.", loginPw));
 		}
 		Member member = memberService.getMemberRow(loginId, loginPw);
 
