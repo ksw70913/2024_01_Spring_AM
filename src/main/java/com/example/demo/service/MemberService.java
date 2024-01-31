@@ -17,7 +17,7 @@ public class MemberService {
 		this.memberRepository = memberRepository;
 	}
 
-	public ResultData join(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
+	public ResultData<Integer> join(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
 
 		Member existsMember = getMemberByLoginId(loginId);
@@ -44,25 +44,12 @@ public class MemberService {
 		return memberRepository.getMemberByNameAndEmail(name, email);
 	}
 
-	private Member getMemberByLoginId(String loginId) {
+	public Member getMemberByLoginId(String loginId) {
 		return memberRepository.getMemberByLoginId(loginId);
 	}
 
 	public Member getMember(int id) {
 		return memberRepository.getMember(id);
-	}
-
-	public int checkLoginId(String loginId) {
-		return memberRepository.checkLoginId(loginId);
-
-	}
-
-	public String checkLoginPw(String loginId) {
-		return memberRepository.checkLoginPw(loginId);
-	}
-
-	public Member getMemberRow(String loginId, String loginPw) {
-		return memberRepository.getMemberRow(loginId, loginPw);
 	}
 
 }
