@@ -5,9 +5,11 @@
 <mapper namespace="com.example.demo.repository.ArticleRepository">
 	<select id="getArticles" resultType="Article">
 		SELECT *
-		FROM article
-		ORDER BY
-		id DESC
+		FROM article a
+		INNER
+		JOIN `member` m
+		ON a.memberId = m.id
+		ORDER BY a.id DESC
 	</select>
 
 	<update id="modifyArticle">
