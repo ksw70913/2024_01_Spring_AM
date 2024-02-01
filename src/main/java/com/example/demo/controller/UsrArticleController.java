@@ -110,7 +110,9 @@ public class UsrArticleController {
 
 		ResultData loginedMemberCanModifyRd = articleService.userCanModify(loginedMemberId, article);
 
-		articleService.modifyArticle(id, title, body);
+		if (loginedMemberCanModifyRd.isSuccess()) {
+			articleService.modifyArticle(id, title, body);
+		}
 
 		return ResultData.from(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg(), "id", id);
 	}
@@ -137,13 +139,13 @@ public class UsrArticleController {
 			return ResultData.from("F-1", Ut.f("%d번 글은 존재하지 않습니다", id), "id", id);
 		}
 
-		if (article.getMemberId() != loginedMemberId) {
-			return ResultData.from("F-2", Ut.f("%d번 글에 대한 권한이 없습니다", id), "id", id);
+		ResultData loginedMemberCanDeleteRd = articleService.userCanDelete(loginedMemberId, article);
+
+		if (loginedMemberCanDeleteRd.isSuccess()) {
+			articleService.deleteArticle(id);
 		}
 
-		articleService.deleteArticle(id);
-
-		return ResultData.from("S-1", Ut.f("%d번 글이 삭제 되었습니다", id), "id", id);
+		return ResultData.from(loginedMemberCanDeleteRd.getResultCode(), loginedMemberCanDeleteRd.getMsg(), "id", id);
 	}
 
 }
