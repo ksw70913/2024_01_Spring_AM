@@ -6,7 +6,8 @@
 	<select id="getArticles" resultType="Article">
 		SELECT *
 		FROM article
-		ORDER BY id DESC
+		ORDER BY
+		id DESC
 	</select>
 
 	<update id="modifyArticle">
@@ -21,8 +22,11 @@
 
 	<select id="getArticle" resultType="Article">
 		SELECT *
-		FROM article
-		WHERE id = #{id}
+		FROM article a
+		INNER
+		JOIN `member` m
+		ON a.memberId = m.id
+		WHERE a.id = #{id}
 	</select>
 
 
