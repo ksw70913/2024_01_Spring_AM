@@ -10,32 +10,33 @@
 			<tbody>
 				<tr>
 					<th>번호</th>
-					<td>${articleRow.id }</td>
+					<td>${article.id }</td>
 				</tr>
 				<tr>
 					<th>작성날짜</th>
-					<td>${articleRow.regDate }</td>
+					<td>${article.regDate }</td>
 				</tr>
 				<tr>
 					<th>수정날짜</th>
-					<td>${articleRow.updateDate }</td>
+					<td>${article.updateDate }</td>
 				</tr>
 				<tr>
 					<th>작성자</th>
-					<td>${articleRow.nickname }</td>
+					<td>${article.extra__writer }</td>
 				</tr>
 				<tr>
 					<th>제목</th>
-					<td>${articleRow.title }</td>
+					<td>${article.title }</td>
 				</tr>
 				<tr>
 					<th>내용</th>
-					<td>${articleRow.body }</td>
+					<td>${article.body }</td>
 				</tr>
 			</tbody>
 		</table>
 		<div class="btns">
-			<button type="button" onclick="history.back();">뒤로가기</button>
+			<button class="hover:underline" type="button" onclick="history.back();">뒤로가기</button>
+			<a href="../article/modify?id=${article.id }">수정</a> <a href="../article/doDelete?id=${article.id }">삭제</a>
 		</div>
 	</div>
 </section>

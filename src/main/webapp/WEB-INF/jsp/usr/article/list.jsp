@@ -7,14 +7,18 @@
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
 		<table class="table-box-1" border="1">
+			<colgroup>
+				<col style="width: 10%" />
+				<col style="width: 20%" />
+				<col style="width: 60%" />
+				<col style="width: 10%" />
+			</colgroup>
 			<thead>
 				<tr>
 					<th>번호</th>
 					<th>날짜</th>
 					<th>제목</th>
 					<th>작성자</th>
-					<th>수정</th>
-					<th>삭제</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -24,9 +28,7 @@
 						<td>${article.id }</td>
 						<td>${article.regDate.substring(0,10) }</td>
 						<td><a class="hover:underline" href="detail?id=${article.id }">${article.title }</a></td>
-						<td>${article.nickname }</td>
-						<td><a class="hover:underline" href="modify?id=${article.id }">수정</a></td>
-						<td><a class="hover:underline" href="delete?id=${article.id }">삭제</a></td>
+						<td>${article.extra__writer }</td>
 					</tr>
 				</c:forEach>
 			</tbody>
