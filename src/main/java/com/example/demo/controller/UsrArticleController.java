@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,17 @@ public class UsrArticleController {
 	// 액션 메서드
 
 	@RequestMapping("/usr/article/list")
-	public String showList(HttpServletRequest req, Model model, int boardId) {
+	public String showList(HttpServletRequest req, Model model, int boardId) throws IOException {
+
+		Rq rq = (Rq) req.getAttribute("rq");
 
 		Board board = boardService.getBoardById(boardId);
 
-		List<Article> articles = articleService.getArticles();
+		List<Article> articles = articleService.getForPrintArticles(boardId);
+
+//		if (board == null) {
+//			return rq.printHistoryBack("없는 게시판이야");
+//		}
 
 		model.addAttribute("board", board);
 		model.addAttribute("articles", articles);

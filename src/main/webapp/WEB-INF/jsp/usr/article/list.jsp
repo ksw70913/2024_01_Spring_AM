@@ -22,7 +22,6 @@
 				</tr>
 			</thead>
 			<tbody>
-
 				<c:forEach var="article" items="${articles }">
 					<tr class="hover">
 						<td>${article.id }</td>
