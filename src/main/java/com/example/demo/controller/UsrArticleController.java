@@ -48,17 +48,23 @@ public class UsrArticleController {
 		return "usr/article/list";
 	}
 
+	@RequestMapping("/usr/article/write")
+	public String write() {
+
+		return "usr/article/write";
+	}
+
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public ResultData<Article> doWrite(HttpServletRequest req, String title, String body) {
+	public String doWrite(HttpServletRequest req, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (Ut.isNullOrEmpty(title)) {
-			return ResultData.from("F-1", "제목을 입력해주세요");
+			return Ut.jsHistoryBack("F-1", "제목을 입력해주세요");
 		}
 		if (Ut.isNullOrEmpty(body)) {
-			return ResultData.from("F-2", "내용을 입력해주세요");
+			return Ut.jsHistoryBack("F-2", "내용을 입력해주세요");
 		}
 
 		ResultData<Integer> writeArticleRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body);
@@ -67,7 +73,7 @@ public class UsrArticleController {
 
 		Article article = articleService.getArticle(id);
 
-		return ResultData.newData(writeArticleRd, "article", article);
+		return Ut.jsReplace("S-1", Ut.f("%d번글이 생성되었습니다.", id), "../article/list");
 	}
 
 	@RequestMapping("/usr/article/modify")
