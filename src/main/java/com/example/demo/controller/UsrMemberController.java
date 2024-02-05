@@ -18,6 +18,9 @@ import jakarta.servlet.http.HttpSession;
 public class UsrMemberController {
 
 	@Autowired
+	private Rq rq;
+
+	@Autowired
 	private MemberService memberService;
 
 	@RequestMapping("/usr/member/doLogout")
@@ -26,13 +29,23 @@ public class UsrMemberController {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
+		if (!rq.isLogined()) {
+			return Ut.jsHistoryBack("F-A", "이미 로그아웃 상태입니다");
+		}
+
 		rq.logout();
 
 		return Ut.jsReplace("S-A", "로그아웃 되었습니다.", "/");
 	}
 
 	@RequestMapping("/usr/member/login")
-	public String showLogin(HttpSession httpSession) {
+	public String showLogin(HttpServletRequest req) {
+
+		Rq rq = (Rq) req.getAttribute("rq");
+
+		if (rq.isLogined()) {
+			return Ut.jsHistoryBack("F-A", "이미 로그인 함");
+		}
 
 		return "usr/member/login";
 	}
@@ -77,54 +90,50 @@ public class UsrMemberController {
 
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public String doJoin(HttpServletRequest req, String loginId, String loginPw, String name, String nickname,
-			String cellphoneNum, String email) {
+	public String doJoin(HttpServletRequest req, String loginId, String loginPw, String loginPw2, String name,
+			String nickname, String cellphoneNum, String email) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (rq.isLogined()) {
-			boolean isLogined = false;
-
-			if (rq.isLogined()) {
-				return Ut.jsHistoryBack("F-A", "이미 로그인 함");
-			}
-
-			if (Ut.isNullOrEmpty(loginId)) {
-				return Ut.jsHistoryBack("F-1", "아이디를 입력해주세요.");
-			}
-			if (Ut.isNullOrEmpty(loginPw)) {
-				return Ut.jsHistoryBack("F-2", "비밀번호를 입력해주세요.");
-			}
-			if (Ut.isNullOrEmpty(loginPw2)) {
-				return Ut.jsHistoryBack("F-3", "2차 비밀번호를 입력해주세요.");
-			}
-			if (Ut.isNullOrEmpty(name)) {
-				return Ut.jsHistoryBack("F-4", "이름을 입력해주세요.");
-			}
-			if (Ut.isNullOrEmpty(nickname)) {
-				return Ut.jsHistoryBack("F-5", "닉네임을 입력해주세요.");
-			}
-			if (Ut.isNullOrEmpty(cellphoneNum)) {
-				return Ut.jsHistoryBack("F-6", "전화번호를 입력해주세요.");
-			}
-			if (Ut.isNullOrEmpty(email)) {
-				return Ut.jsHistoryBack("F-7", "이메일을 입력해주세요.");
-			}
-
-			if (loginPw.equals(loginPw2)) {
-				return Ut.jsHistoryBack("F-8", "비밀번호와 2차비밀번호가 일치하지 않습니다.");
-			}
-
-			ResultData<Integer> joinRd = memberService.join(loginId, loginPw, name, nickname, cellphoneNum, email);
-
-			if (joinRd.isFail()) {
-				return Ut.jsHistoryBack("F-9", "회원가입이 실패했습니다.");
-			}
-
-			Member member = memberService.getMember(joinRd.getData1());
-
-			return Ut.jsReplace("S-1", Ut.f("%s님이 등록되었습니다.", member.getNickname()), "/");
+			return Ut.jsHistoryBack("F-A", "이미 로그인 함");
 		}
+
+		if (Ut.isNullOrEmpty(loginId)) {
+			return Ut.jsHistoryBack("F-1", "아이디를 입력해주세요.");
+		}
+		if (Ut.isNullOrEmpty(loginPw)) {
+			return Ut.jsHistoryBack("F-2", "비밀번호를 입력해주세요.");
+		}
+		if (Ut.isNullOrEmpty(loginPw2)) {
+			return Ut.jsHistoryBack("F-3", "2차 비밀번호를 입력해주세요.");
+		}
+		if (Ut.isNullOrEmpty(name)) {
+			return Ut.jsHistoryBack("F-4", "이름을 입력해주세요.");
+		}
+		if (Ut.isNullOrEmpty(nickname)) {
+			return Ut.jsHistoryBack("F-5", "닉네임을 입력해주세요.");
+		}
+		if (Ut.isNullOrEmpty(cellphoneNum)) {
+			return Ut.jsHistoryBack("F-6", "전화번호를 입력해주세요.");
+		}
+		if (Ut.isNullOrEmpty(email)) {
+			return Ut.jsHistoryBack("F-7", "이메일을 입력해주세요.");
+		}
+
+		if (loginPw.equals(loginPw2)) {
+			return Ut.jsHistoryBack("F-8", "비밀번호와 2차비밀번호가 일치하지 않습니다.");
+		}
+
+		ResultData<Integer> joinRd = memberService.join(loginId, loginPw, name, nickname, cellphoneNum, email);
+
+		if (joinRd.isFail()) {
+			return Ut.jsHistoryBack("F-9", "회원가입이 실패했습니다.");
+		}
+
+		Member member = memberService.getMember(joinRd.getData1());
+
+		return Ut.jsReplace("S-1", Ut.f("%s님이 등록되었습니다.", member.getNickname()), "/");
 
 	}
 }
