@@ -5,8 +5,8 @@
 
 
 <section class="mt-8 text-xl px-4">
-	<div class="mx-auto">
-		<table class="table-box-1" border="1">
+	<div class="mx-auto overflow-x-auto">
+		<table class="table-box-1 table table-zebra" border="1">
 			<colgroup>
 				<col style="width: 10%" />
 				<col style="width: 20%" />

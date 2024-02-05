@@ -19,13 +19,13 @@
 					</tr>
 					<tr>
 						<th></th>
-						<td><input type="submit" value="작성" /></td>
+						<td><input class="btn btn-info" type="submit" value="작성" /></td>
 					</tr>
 				</tbody>
 			</table>
 		</form>
 		<div class="btns">
-			<button class="hover:underline" type="button" onclick="history.back();">뒤로가기</button>
+			<button class="hover:underline btn btn-outline" type="button" onclick="history.back();">뒤로가기</button>
 		</div>
 	</div>
 </section>
