@@ -44,7 +44,6 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/list")
 	public String showList(Model model) {
-
 		List<Article> articles = articleService.getArticles();
 
 		model.addAttribute("articles", articles);
@@ -53,7 +52,7 @@ public class UsrArticleController {
 	}
 
 	@RequestMapping("/usr/article/write")
-	public String write() {
+	public String showJoin(HttpServletRequest req) {
 
 		return "usr/article/write";
 	}
@@ -77,11 +76,12 @@ public class UsrArticleController {
 
 		Article article = articleService.getArticle(id);
 
-		return Ut.jsReplace("S-1", Ut.f("%d번글이 생성되었습니다.", id), "../article/list");
+		return Ut.jsReplace(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), "../article/detail?id=" + id);
+
 	}
 
 	@RequestMapping("/usr/article/modify")
-	public String modify(HttpServletRequest req, Model model, int id) {
+	public String showModify(HttpServletRequest req, Model model, int id) {
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
@@ -93,10 +93,8 @@ public class UsrArticleController {
 		model.addAttribute("article", article);
 
 		return "usr/article/modify";
-
 	}
 
-	// 로그인 체크 -> 유무 체크 -> 권한 체크 -> 수정
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
 	public String doModify(HttpServletRequest req, int id, String title, String body) {
@@ -115,7 +113,7 @@ public class UsrArticleController {
 		}
 
 		return Ut.jsReplace(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg(),
-				"../article/list");
+				"../article/detail?id=" + id);
 	}
 
 	// 로그인 체크 -> 유무 체크 -> 권한 체크 -> 삭제
