@@ -44,6 +44,7 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/list")
 	public String showList(Model model) {
+
 		List<Article> articles = articleService.getArticles();
 
 		model.addAttribute("articles", articles);
@@ -80,13 +81,19 @@ public class UsrArticleController {
 	}
 
 	@RequestMapping("/usr/article/modify")
-	public String modify(HttpServletRequest req, int id) {
+	public String modify(HttpServletRequest req, Model model, int id) {
 		Rq rq = (Rq) req.getAttribute("rq");
 
-		Article article = articleService.getArticle(id);
-		req.setAttribute("article", article);
+		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+
+		if (article == null) {
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 글은 존재하지 않습니다", id));
+		}
+
+		model.addAttribute("article", article);
 
 		return "usr/article/modify";
+
 	}
 
 	// 로그인 체크 -> 유무 체크 -> 권한 체크 -> 수정
