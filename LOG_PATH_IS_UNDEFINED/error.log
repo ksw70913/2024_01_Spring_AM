@@ -580,3 +580,39 @@ Caused by: java.lang.Error: Unresolved compilation problem:
 	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
 	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:199)
 	... 24 common frames omitted
+2024-02-05 16:47:18 [ERROR] o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field boardService in com.example.demo.controller.UsrArticleController required a bean of type 'com.example.demo.service.BoardService' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.example.demo.service.BoardService' in your configuration.
+
+2024-02-05 16:47:32 [ERROR] o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field boardService in com.example.demo.controller.UsrArticleController required a bean of type 'com.example.demo.service.BoardService' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.example.demo.service.BoardService' in your configuration.
+
