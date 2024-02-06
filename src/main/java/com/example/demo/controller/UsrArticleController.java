@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ArticleService;
@@ -38,7 +38,7 @@ public class UsrArticleController {
 	// 액션 메서드
 
 	@RequestMapping("/usr/article/list")
-	public String showList(HttpServletRequest req, Model model, int boardId) throws IOException {
+	public String showList(HttpServletRequest req, Model model, @RequestParam(defaultValue = "1") int boardId) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
@@ -46,9 +46,9 @@ public class UsrArticleController {
 
 		List<Article> articles = articleService.getForPrintArticles(boardId);
 
-//		if (board == null) {
-//			return rq.printHistoryBack("없는 게시판이야");
-//		}
+		if (board == null) {
+			return rq.historyBackOnView("없는 게시판이야");
+		}
 
 		model.addAttribute("board", board);
 		model.addAttribute("articles", articles);
