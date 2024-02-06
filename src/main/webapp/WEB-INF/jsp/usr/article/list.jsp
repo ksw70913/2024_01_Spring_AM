@@ -2,6 +2,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="pageTitle" value="#{board.code } ARTICLE LIST"></c:set>
 <%@ include file="../common/head.jspf"%>
+<%
+int cPage = (int) request.getAttribute("page");
+int totalPage = (int) request.getAttribute("totalPage");
+int pageSize = (int) request.getAttribute("pageSize");
+int pageGroup = (int) request.getAttribute("pageGroup");
+int from = (int) request.getAttribute("from");
+int end = (int) request.getAttribute("end");
+%>
 
 
 <section class="mt-8 text-xl px-4">
@@ -35,11 +43,67 @@
 			</tbody>
 		</table>
 	</div>
+
 	<div class="pagination flex justify-center mt-3">
 		<div class="btn-group">
-			<c:forEach begin="1" end="20" var="i">
-				<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }" href="?page=${i }">${i }</a>
-			</c:forEach>
+			<%
+			if (pageGroup * pageSize > totalPage) {
+				end = totalPage;
+			}
+
+			if (from < 1) {
+				from = 1;
+			}
+
+			if (end > totalPage) {
+				end = totalPage;
+			}
+			int beforeBtn = cPage - pageSize;
+
+			if (beforeBtn < 1) {
+				beforeBtn = 1;
+			}
+
+			int afterBtn = pageGroup * pageSize + 1;
+
+			if (cPage > 1) {
+			%>
+			<a href="?boardId=${board.id }&page=1">◀◀</a>
+			<%
+			}
+			%>
+			<a href="?boardId=${board.id }&page=<%=beforeBtn%>">◁</a>
+			<c:choose>
+				<c:when test="${board.id == 1 }">
+					<c:forEach begin="<%=from%>" end="<%=end%>" var="i">
+						<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }" href="?boardId=${board.id }&page=${i } ">${i }</a>
+					</c:forEach>
+				</c:when>
+				<c:when test="${board.id == 2 }">
+					<c:forEach begin="<%=from%>" end="<%=end%>" var="i">
+						<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }" href="?boardId=${board.id }&page=${i } ">${i }</a>
+					</c:forEach>
+				</c:when>
+				<c:when test="${board.id == 3 }">
+
+					<c:forEach begin="<%=from%>" end="<%=end%>" var="i">
+						<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }" href="?boardId=${board.id }&page=${i } ">${i }</a>
+					</c:forEach>
+
+				</c:when>
+			</c:choose>
+			<%
+			if (afterBtn < totalPage) {
+			%>
+			<a href="?boardId=${board.id }&page=<%=afterBtn%>">▷</a>
+			<%
+			}
+			if (cPage < totalPage) {
+			%>
+			<a href="?boardId=${board.id }&page=<%=totalPage%>">▶▶</a>
+			<%
+			}
+			%>
 		</div>
 	</div>
 </section>

@@ -53,8 +53,20 @@ public class UsrArticleController {
 
 		int itemsInAPage = 10;
 
-		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
+		int totalPage = (int) Math.ceil(articlesCount / (double) itemsInAPage);
 
+		int pageSize = 10; // 한 화면에 보여줄 페이지 갯수 -> 10개
+		int pageGroup = (int) Math.ceil((double) page / pageSize); // 한번에 보여줄 페이지의 그룹
+		int from = ((pageGroup - 1) * pageSize) + 1; // 한번에 보여줄 때의 첫번째 페이지 번호
+		int end = pageGroup * pageSize; // 한번에 보여줄 때의 마지막 페이지 번호
+
+		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
+		req.setAttribute("page", page);
+		req.setAttribute("totalPage", totalPage);
+		req.setAttribute("pageSize", pageSize);
+		req.setAttribute("pageGroup", pageGroup);
+		req.setAttribute("from", from);
+		req.setAttribute("end", end);
 		model.addAttribute("board", board);
 		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("articles", articles);
