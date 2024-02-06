@@ -6,6 +6,7 @@
 
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto overflow-x-auto">
+		<div class="badge badge-outline">${articlesCount }개</div>
 		<table class="table-box-1 table" border="1">
 			<colgroup>
 				<col style="width: 10%" />
@@ -22,6 +23,7 @@
 				</tr>
 			</thead>
 			<tbody>
+
 				<c:forEach var="article" items="${articles }">
 					<tr class="hover">
 						<td>${article.id }</td>

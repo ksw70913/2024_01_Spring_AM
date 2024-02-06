@@ -114,19 +114,19 @@ CREATE TABLE board(
 INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
-`code` = 'notice',
+`code` = 'NOTICE',
 `name` = '공지사항';
 
 INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
-`code` = 'free',
+`code` = 'FREE',
 `name` = '자유';
 
 INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
-`code` = 'qna',
+`code` = 'QnA',
 `name` = '질의응답';
 
 ALTER TABLE article ADD COLUMN boardId INT(10) UNSIGNED NOT NULL AFTER `memberId`;
@@ -144,6 +144,18 @@ SET boardId = 3
 WHERE id = 4;
 
 ###############################################
+
+INSERT INTO article
+(
+    regDate, updateDate, memberId, boardId, title, `body`
+)
+SELECT NOW(),NOW(), FLOOR(RAND() * 2) + 2, FLOOR(RAND() * 3) + 1, CONCAT('제목_',RAND()), CONCAT('내용_',RAND())
+FROM article;
+
+SELECT FLOOR(RAND() * 2) + 2
+
+SELECT FLOOR(RAND() * 3) + 1
+
 
 SHOW FULL COLUMNS FROM `member`;
 DESC `member`;
