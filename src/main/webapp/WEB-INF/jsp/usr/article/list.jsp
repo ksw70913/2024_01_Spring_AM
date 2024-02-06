@@ -73,25 +73,9 @@ int end = (int) request.getAttribute("end");
 			}
 			%>
 			<a href="?boardId=${board.id }&page=<%=beforeBtn%>">◁</a>
-			<c:choose>
-				<c:when test="${board.id == 1 }">
-					<c:forEach begin="<%=from%>" end="<%=end%>" var="i">
-						<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }" href="?boardId=${board.id }&page=${i } ">${i }</a>
-					</c:forEach>
-				</c:when>
-				<c:when test="${board.id == 2 }">
-					<c:forEach begin="<%=from%>" end="<%=end%>" var="i">
-						<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }" href="?boardId=${board.id }&page=${i } ">${i }</a>
-					</c:forEach>
-				</c:when>
-				<c:when test="${board.id == 3 }">
-
-					<c:forEach begin="<%=from%>" end="<%=end%>" var="i">
-						<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }" href="?boardId=${board.id }&page=${i } ">${i }</a>
-					</c:forEach>
-
-				</c:when>
-			</c:choose>
+			<c:forEach begin="<%=from%>" end="<%=end%>" var="i">
+				<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }" href="?boardId=${param.boardId }&page=${i }&searchKeyword=${param.searchKeyword } ">${i }</a>
+			</c:forEach>
 			<%
 			if (afterBtn < totalPage) {
 			%>

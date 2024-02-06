@@ -39,8 +39,7 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/list")
 	public String showList(HttpServletRequest req, Model model, @RequestParam(defaultValue = "1") int boardId,
-			@RequestParam(defaultValue = "1") int page) {
-
+			@RequestParam(defaultValue = "1") int page, String searchKeyword) {
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Board board = boardService.getBoardById(boardId);
@@ -60,7 +59,9 @@ public class UsrArticleController {
 		int from = ((pageGroup - 1) * pageSize) + 1; // 한번에 보여줄 때의 첫번째 페이지 번호
 		int end = pageGroup * pageSize; // 한번에 보여줄 때의 마지막 페이지 번호
 
-		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
+		List<Article> articles = articleService.getForPrintArticles(boardId, searchKeyword, itemsInAPage, page);
+
+		System.out.println(123123);
 		req.setAttribute("page", page);
 		req.setAttribute("totalPage", totalPage);
 		req.setAttribute("pageSize", pageSize);

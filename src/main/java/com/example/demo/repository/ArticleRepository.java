@@ -103,12 +103,15 @@ public interface ArticleRepository {
 			<if test="boardId != 0">
 				AND A.boardId = #{boardId}
 			</if>
+			<if test= "#{searchKeyword} != null">
+			AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
 			ORDER BY A.id DESC
 			<if test="limitFrom >= 0 ">
 				LIMIT #{limitFrom}, #{limitTake}
 			</if>
 			</script>
 			""")
-	public List<Article> getForPrintArticles(int boardId, int limitFrom, int limitTake);
+	public List<Article> getForPrintArticles(int boardId, String searchKeyword, int limitFrom, int limitTake);
 
 }
