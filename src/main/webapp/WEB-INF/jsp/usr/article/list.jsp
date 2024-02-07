@@ -73,20 +73,23 @@ String searchKeyword = (String) request.getAttribute("searchKeyword");
 			<%
 			}
 			%>
-			<a href="?boardId=${board.id }&page=<%=beforeBtn%>">◁</a>
+			<a
+				href="?boardId=${board.id }&page=<%=beforeBtn%>&searchKeywordTypeCode=${param.searchKeywordTypeCode }&searchKeyword=${param.searchKeyword }">◁</a>
 			<c:forEach begin="<%=from%>" end="<%=end%>" var="i">
 				<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }"
-					href="?boardId=${param.boardId }&page=${i }&searchKeyword=${param.searchKeyword } ">${i }</a>
+					href="?boardId=${param.boardId }&page=${i }&searchKeywordTypeCode=${param.searchKeywordTypeCode }&searchKeyword=${param.searchKeyword } ">${i }</a>
 			</c:forEach>
 			<%
 			if (afterBtn < totalPage) {
 			%>
-			<a href="?boardId=${board.id }&page=<%=afterBtn%>">▷</a>
+			<a
+				href="?boardId=${board.id }&page=<%=afterBtn%>&searchKeywordTypeCode=${param.searchKeywordTypeCode }&searchKeyword=${param.searchKeyword }">▷</a>
 			<%
 			}
 			if (cPage < totalPage) {
 			%>
-			<a href="?boardId=${board.id }&page=<%=totalPage%>">▶▶</a>
+			<a
+				href="?boardId=${board.id }&page=<%=totalPage%>&searchKeywordTypeCode=${param.searchKeywordTypeCode }&searchKeyword=${param.searchKeyword }">▶▶</a>
 			<%
 			}
 			%>
@@ -101,6 +104,11 @@ String searchKeyword = (String) request.getAttribute("searchKeyword");
 			<div>
 				<input type="hidden" name="boardId" value="${param.boardId }" /> <input type="hidden" name="page" value="1" />
 			</div>
+			<select class="form-control" name="searchKeywordTypeCode">
+				<option value="0">선택</option>
+				<option value="title">제목</option>
+				<option value="body">내용</option>
+			</select>
 			<div>
 				<input type="text" class="form-control" placeholder="검색어 입력" name="searchKeyword" maxlength="100">
 			</div>
