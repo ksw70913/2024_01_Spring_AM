@@ -83,6 +83,8 @@ public class UsrArticleController {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
+		articleService.increaseClick(id);
+
 		model.addAttribute("article", article);
 
 		return "usr/article/detail";

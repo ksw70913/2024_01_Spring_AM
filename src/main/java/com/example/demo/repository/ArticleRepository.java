@@ -140,4 +140,11 @@ public interface ArticleRepository {
 	public List<Article> getForPrintArticles(int boardId, String searchKeywordTypeCode, String searchKeyword,
 			int limitFrom, int limitTake);
 
+	@Update("""
+			UPDATE article
+			SET click = click +1
+			WHERE id = #{id}
+				""")
+	public int increaseClick(int id);
+
 }

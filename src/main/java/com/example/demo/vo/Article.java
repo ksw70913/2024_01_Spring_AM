@@ -14,9 +14,14 @@ public class Article {
 	private int memberId;
 	private String title;
 	private String body;
+	private int click;
 
 	private String extra__writer;
 
 	private boolean userCanModify;
 	private boolean userCanDelete;
+
+	public void increaseClick() {
+		this.click++;
+	}
 }

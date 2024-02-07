@@ -103,4 +103,8 @@ public class ArticleService {
 				limitTake);
 	}
 
+	public int increaseClick(int id) {
+		return articleRepository.increaseClick(id);
+	}
+
 }
