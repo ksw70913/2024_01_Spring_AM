@@ -9,6 +9,7 @@ int pageSize = (int) request.getAttribute("pageSize");
 int pageGroup = (int) request.getAttribute("pageGroup");
 int from = (int) request.getAttribute("from");
 int end = (int) request.getAttribute("end");
+String searchKeyword = (String) request.getAttribute("searchKeyword");
 %>
 
 
@@ -74,7 +75,8 @@ int end = (int) request.getAttribute("end");
 			%>
 			<a href="?boardId=${board.id }&page=<%=beforeBtn%>">◁</a>
 			<c:forEach begin="<%=from%>" end="<%=end%>" var="i">
-				<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }" href="?boardId=${param.boardId }&page=${i }&searchKeyword=${param.searchKeyword } ">${i }</a>
+				<a class="btn btn-sm ${param.page == i ? 'btn-active' : '' }"
+					href="?boardId=${param.boardId }&page=${i }&searchKeyword=${param.searchKeyword } ">${i }</a>
 			</c:forEach>
 			<%
 			if (afterBtn < totalPage) {
@@ -92,6 +94,21 @@ int end = (int) request.getAttribute("end");
 	</div>
 </section>
 
+<div class="container">
+	<div class="row">
+		<form method="get" name="search" action="../article/list">
 
+			<div>
+				<input type="hidden" name="boardId" value="${param.boardId }" /> <input type="hidden" name="page" value="1" />
+			</div>
+			<div>
+				<input type="text" class="form-control" placeholder="검색어 입력" name="searchKeyword" maxlength="100">
+			</div>
+
+			<button type="submit" class="btn btn-success">검색</button>
+
+		</form>
+	</div>
+</div>
 
 <%@ include file="../common/foot.jspf"%>

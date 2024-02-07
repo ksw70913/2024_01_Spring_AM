@@ -90,7 +90,8 @@ public class ArticleService {
 //		return articleRepository.getForPrintArticles(boardId);
 //	}
 
-	public List<Article> getForPrintArticles(int boardId, String searchKeyword, int itemsInAPage, int page) {
+	public List<Article> getForPrintArticles(int boardId, String searchKeywordTypeCode, String searchKeyword,
+			int itemsInAPage, int page) {
 
 //		SELECT * FROM article WHERE boardId = 1 ORDER BY id DESC LIMIT 0, 10; 1page
 //		SELECT * FROM article WHERE boardId = 1 ORDER BY id DESC LIMIT 10, 10; 2page
@@ -98,7 +99,8 @@ public class ArticleService {
 		int limitFrom = (page - 1) * itemsInAPage;
 		int limitTake = itemsInAPage;
 
-		return articleRepository.getForPrintArticles(boardId, searchKeyword, limitFrom, limitTake);
+		return articleRepository.getForPrintArticles(boardId, searchKeywordTypeCode, searchKeyword, limitFrom,
+				limitTake);
 	}
 
 }
