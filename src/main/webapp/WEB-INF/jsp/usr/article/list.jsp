@@ -69,7 +69,8 @@ String searchKeyword = (String) request.getAttribute("searchKeyword");
 
 			if (cPage > 1) {
 			%>
-			<a href="?boardId=${board.id }&page=1">◀◀</a>
+			<a
+				href="?boardId=${board.id }&page=1&searchKeywordTypeCode=${param.searchKeywordTypeCode }&searchKeyword=${param.searchKeyword }">◀◀</a>
 			<%
 			}
 			%>
@@ -105,7 +106,7 @@ String searchKeyword = (String) request.getAttribute("searchKeyword");
 				<input type="hidden" name="boardId" value="${param.boardId }" /> <input type="hidden" name="page" value="1" />
 			</div>
 			<select class="form-control" name="searchKeywordTypeCode">
-				<option value="0">선택</option>
+				<option value="title,body">선택</option>
 				<option value="title">제목</option>
 				<option value="body">내용</option>
 			</select>
