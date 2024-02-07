@@ -145,6 +145,6 @@ public interface ArticleRepository {
 			SET click = click +1
 			WHERE id = #{id}
 				""")
-	public int increaseClick(int id);
+	public void increaseClick(int id);
 
 }

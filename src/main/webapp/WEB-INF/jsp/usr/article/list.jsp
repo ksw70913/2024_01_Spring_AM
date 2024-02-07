@@ -16,6 +16,18 @@ String searchKeyword = (String) request.getAttribute("searchKeyword");
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto overflow-x-auto">
 		<div class="badge badge-outline">${articlesCount }개</div>
+		<div class="flex-grow"></div>
+		<form action="">
+			<input type="hidden" name="boardId" value="${param.boardId }" /> <select
+				data-value="${param.searchKeywordTypeCode }" class="select select-bordered select-sm w-full max-w-xs"
+				name="searchKeywordTypeCode">
+				<option value="title">title</option>
+				<option value="body">body</option>
+				<option value="title,body">title+body</option>
+			</select> <input value="${param.searchKeyword }" name="searchKeyword" type="text" placeholder="What is your searchKeyword?"
+				class="input-sm input input-bordered w-48 max-w-xs" />
+			<button class="btn btn-ghost btn-sm" type="submit">검색</button>
+		</form>
 		<table class="table-box-1 table" border="1">
 			<colgroup>
 				<col style="width: 10%" />
@@ -99,27 +111,5 @@ String searchKeyword = (String) request.getAttribute("searchKeyword");
 		</div>
 	</div>
 </section>
-
-<div class="container">
-	<div class="row">
-		<form method="get" name="search" action="../article/list">
-
-			<div>
-				<input type="hidden" name="boardId" value="${param.boardId }" /> <input type="hidden" name="page" value="1" />
-			</div>
-			<select class="form-control" name="searchKeywordTypeCode">
-				<option value="title,body">선택</option>
-				<option value="title">제목</option>
-				<option value="body">내용</option>
-			</select>
-			<div>
-				<input type="text" class="form-control" placeholder="검색어 입력" name="searchKeyword" maxlength="100">
-			</div>
-
-			<button type="submit" class="btn btn-success">검색</button>
-
-		</form>
-	</div>
-</div>
 
 <%@ include file="../common/foot.jspf"%>
