@@ -8,8 +8,7 @@ CREATE TABLE article(
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
     title CHAR(100) NOT NULL,
-    `body` TEXT NOT NULL,
-    click INT(100) UNSIGNED NOT NULL
+    `body` TEXT NOT NULL
 );
 
 # member 테이블 생성
@@ -144,6 +143,8 @@ UPDATE article
 SET boardId = 3
 WHERE id = 4;
 
+ALTER TABLE article ADD COLUMN hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER `body`;
+
 ###############################################
 
 INSERT INTO article
@@ -152,6 +153,18 @@ INSERT INTO article
 )
 SELECT NOW(),NOW(), FLOOR(RAND() * 2) + 2, FLOOR(RAND() * 3) + 1, CONCAT('제목_',RAND()), CONCAT('내용_',RAND())
 FROM article;
+
+UPDATE article 
+SET title = '제목5'
+WHERE id = 5;
+
+UPDATE article 
+SET title = '제목11'
+WHERE id = 6;
+
+UPDATE article 
+SET title = '제목45'
+WHERE id = 7;
 
 SELECT FLOOR(RAND() * 2) + 2
 
@@ -172,15 +185,24 @@ FROM `board`;
 
 SELECT LAST_INSERT_ID();
 
-SELECT A.*, M.nickname AS extra__writer
+SELECT *
 FROM article AS A
-INNER JOIN `member` AS M
-ON A.memberId = M.id
-WHERE boardId = 1
-and title like concat('%', 12, '%')
-ORDER BY A.id DESC
+WHERE 1
 
+	AND boardId = 1
 
-UPDATE article
-set click = click +1
-WHERE id = 1
+			AND A.title LIKE CONCAT('%','0000','%')
+			OR A.body LIKE CONCAT('%','0000','%')
+
+ORDER BY id DESC
+
+SELECT COUNT(*)
+FROM article AS A
+WHERE 1
+
+	AND boardId = 1
+
+			AND A.title LIKE CONCAT('%','0000','%')
+			OR A.body LIKE CONCAT('%','0000','%')
+
+ORDER BY id DESC

@@ -83,7 +83,7 @@ public interface ArticleRepository {
 	@Select("""
 			<script>
 			SELECT COUNT(*) AS cnt
-			FROM article as A
+			FROM article AS A
 			WHERE 1
 			<if test="boardId != 0">
 				AND boardId = #{boardId}
@@ -107,6 +107,20 @@ public interface ArticleRepository {
 			""")
 	public int getArticlesCount(int boardId, String searchKeywordTypeCode, String searchKeyword);
 
+	@Update("""
+			UPDATE article
+			SET hitCount = hitCount + 1
+			WHERE id = #{id}
+			""")
+	public int increaseHitCount(int id);
+
+	@Select("""
+			SELECT hitCount
+			FROM article
+			WHERE id = #{id}
+			""")
+	public int getArticleHitCount(int id);
+
 	@Select("""
 			<script>
 			SELECT A.*, M.nickname AS extra__writer
@@ -117,7 +131,7 @@ public interface ArticleRepository {
 			<if test="boardId != 0">
 				AND A.boardId = #{boardId}
 			</if>
-				<if test="searchKeyword != ''">
+			<if test="searchKeyword != ''">
 				<choose>
 					<when test="searchKeywordTypeCode == 'title'">
 						AND A.title LIKE CONCAT('%',#{searchKeyword},'%')
@@ -137,21 +151,7 @@ public interface ArticleRepository {
 			</if>
 			</script>
 			""")
-	public List<Article> getForPrintArticles(int boardId, String searchKeywordTypeCode, String searchKeyword,
-			int limitFrom, int limitTake);
-
-	@Update("""
-			UPDATE article
-			SET click = click +1
-			WHERE id = #{id}
-				""")
-	public int increaseClick(int id);
-
-	@Select("""
-			SELECT click
-			FROM article
-			WHERE id = #{id}
-			""")
-	public int getArticleClickCount(int id);
+	public List<Article> getForPrintArticles(int boardId, int limitFrom, int limitTake, String searchKeywordTypeCode,
+			String searchKeyword);
 
 }
