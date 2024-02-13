@@ -147,4 +147,11 @@ public interface ArticleRepository {
 				""")
 	public int increaseClick(int id);
 
+	@Select("""
+			SELECT click
+			FROM article
+			WHERE id = #{id}
+			""")
+	public int getArticleClickCount(int id);
+
 }

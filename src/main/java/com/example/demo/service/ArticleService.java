@@ -114,4 +114,8 @@ public class ArticleService {
 
 	}
 
+	public Object getArticleClickCount(int id) {
+		return articleRepository.getArticleClickCount(id);
+	}
+
 }
