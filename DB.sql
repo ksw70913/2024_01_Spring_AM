@@ -8,7 +8,8 @@ CREATE TABLE article(
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
     title CHAR(100) NOT NULL,
-    `body` TEXT NOT NULL
+    `body` TEXT NOT NULL,
+    click INT(100) UNSIGNED NOT NULL
 );
 
 # member 테이블 생성
@@ -170,3 +171,16 @@ SELECT *
 FROM `board`;
 
 SELECT LAST_INSERT_ID();
+
+SELECT A.*, M.nickname AS extra__writer
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+WHERE boardId = 1
+and title like concat('%', 12, '%')
+ORDER BY A.id DESC
+
+
+UPDATE article
+set click = click +1
+WHERE id = 1

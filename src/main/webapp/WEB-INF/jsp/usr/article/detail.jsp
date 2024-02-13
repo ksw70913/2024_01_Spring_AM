@@ -7,16 +7,16 @@
 <script>
 	const params = {};
 	params.id = parseInt('${param.id}');
-	localStorage.setItem('regDate', '${param.regDate}')
-	const regDate = localStorage.getItem('regDate');
-	params.updateDate = '${param.updateDate}';
-	params.extra__writer = '${param.extra__writer}';
-	params.title = '${param.title}';
-	params.body = '${param.body}';
 </script>
 
 <script>
 	function ArticleDetail__doIncreaseHitCount() {
+		const localStorageKey = 'article__' + params.id + '__alreadyView';
+
+		if (localStorage.getItem(localStorageKey)) {
+			return;
+		}
+
 		$.get('../article/doIncreaseHitCountRd', {
 			id : params.id,
 			ajaxMode : 'Y'
