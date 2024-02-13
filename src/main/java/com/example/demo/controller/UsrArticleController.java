@@ -98,8 +98,11 @@ public class UsrArticleController {
 			return increaseHitCountRd;
 		}
 
-		return ResultData.newData(increaseHitCountRd, "ClickCount", articleService.getArticleClickCount(id));
+		ResultData rd = ResultData.newData(increaseHitCountRd, "ClickCount", articleService.getArticleClickCount(id));
 
+		rd.setData2("id", id);
+
+		return rd;
 	}
 
 	@RequestMapping("/usr/article/write")

@@ -7,6 +7,12 @@
 <script>
 	const params = {};
 	params.id = parseInt('${param.id}');
+	localStorage.setItem('regDate', '${param.regDate}')
+	const regDate = localStorage.getItem('regDate');
+	params.updateDate = '${param.updateDate}';
+	params.extra__writer = '${param.extra__writer}';
+	params.title = '${param.title}';
+	params.body = '${param.body}';
 </script>
 
 <script>
