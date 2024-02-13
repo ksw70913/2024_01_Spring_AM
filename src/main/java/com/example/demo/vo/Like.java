@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Like {
+	int id;
 	int memberId;
-	int articleId;
 }

@@ -114,6 +114,13 @@ public interface ArticleRepository {
 			""")
 	public int increaseHitCount(int id);
 
+	@Update("""
+			UPDATE article
+			SET likeCount = likeCount + 1
+			WHERE id = #{id}
+			""")
+	public int increaseLikeCountRd(int id);
+
 	@Select("""
 			SELECT hitCount
 			FROM article
