@@ -42,7 +42,6 @@ public class UsrArticleController {
 			@RequestParam(defaultValue = "1") int page,
 			@RequestParam(defaultValue = "title,body") String searchKeywordTypeCode,
 			@RequestParam(defaultValue = "") String searchKeyword) {
-
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Board board = boardService.getBoardById(boardId);
@@ -53,22 +52,25 @@ public class UsrArticleController {
 			return rq.historyBackOnView("없는 게시판이야");
 		}
 
-		// 한페이지에 글 10개씩이야
-		// 글 20개 -> 2 page
-		// 글 24개 -> 3 page
 		int itemsInAPage = 10;
 
-		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
+		int totalPage = (int) Math.ceil(articlesCount / (double) itemsInAPage);
 
-		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchKeywordTypeCode,
-				searchKeyword);
+		int pageSize = 10; // 한 화면에 보여줄 페이지 갯수 -> 10개
+		int pageGroup = (int) Math.ceil((double) page / pageSize); // 한번에 보여줄 페이지의 그룹
+		int from = ((pageGroup - 1) * pageSize) + 1; // 한번에 보여줄 때의 첫번째 페이지 번호
+		int end = pageGroup * pageSize; // 한번에 보여줄 때의 마지막 페이지 번호
 
+		List<Article> articles = articleService.getForPrintArticles(boardId, searchKeywordTypeCode, searchKeyword,
+				itemsInAPage, page);
+		req.setAttribute("searchKeyword", searchKeyword);
+		req.setAttribute("page", page);
+		req.setAttribute("totalPage", totalPage);
+		req.setAttribute("pageSize", pageSize);
+		req.setAttribute("pageGroup", pageGroup);
+		req.setAttribute("from", from);
+		req.setAttribute("end", end);
 		model.addAttribute("board", board);
-		model.addAttribute("boardId", boardId);
-		model.addAttribute("page", page);
-		model.addAttribute("pagesCount", pagesCount);
-		model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
-		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("articles", articles);
 

@@ -17,11 +17,13 @@
 			return;
 		}
 
+		localStorage.setItem(localStorageKey, true);
+
 		$.get('../article/doIncreaseHitCountRd', {
 			id : params.id,
 			ajaxMode : 'Y'
 		}, function(data) {
-			$('.article-detail__click').empty().html(data.data1);
+			$('.article-detail__hit-count').empty().html(data.data1);
 		}, 'json');
 	}
 
@@ -61,7 +63,7 @@
 				</tr>
 				<tr>
 					<th>조회수</th>
-					<td><span class="article-detail__click">${article.click }</span></td>
+					<td><span class="article-detail__hit-count">${article.hitCount }</span></td>
 				</tr>
 			</tbody>
 		</table>

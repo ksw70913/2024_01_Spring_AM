@@ -131,7 +131,7 @@ public interface ArticleRepository {
 			<if test="boardId != 0">
 				AND A.boardId = #{boardId}
 			</if>
-			<if test="searchKeyword != ''">
+				<if test="searchKeyword != ''">
 				<choose>
 					<when test="searchKeywordTypeCode == 'title'">
 						AND A.title LIKE CONCAT('%',#{searchKeyword},'%')
@@ -151,7 +151,7 @@ public interface ArticleRepository {
 			</if>
 			</script>
 			""")
-	public List<Article> getForPrintArticles(int boardId, int limitFrom, int limitTake, String searchKeywordTypeCode,
-			String searchKeyword);
+	public List<Article> getForPrintArticles(int boardId, String searchKeywordTypeCode, String searchKeyword,
+			int limitFrom, int limitTake);
 
 }
