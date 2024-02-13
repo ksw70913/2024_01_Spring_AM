@@ -103,8 +103,15 @@ public class ArticleService {
 				limitTake);
 	}
 
-	public void increaseClick(int id) {
-		articleRepository.increaseClick(id);
+	public ResultData increaseClick(int id) {
+		int affectedRow = articleRepository.increaseClick(id);
+
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "해당 게시물 없음", "id", id);
+		}
+
+		return ResultData.from("S-1", "해당 게시물 조회수 증가", "id", id);
+
 	}
 
 }
