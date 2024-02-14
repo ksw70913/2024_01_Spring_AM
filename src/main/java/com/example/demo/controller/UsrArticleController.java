@@ -84,11 +84,8 @@ public class UsrArticleController {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
-		int likeChecked = articleService.likeChecked(id, article.getMemberId());
-
 		// 사용자가 좋아요를 누른적이 없음
 
-		model.addAttribute("likeCheck", likeChecked);
 		model.addAttribute("article", article);
 
 		return "usr/article/detail";
