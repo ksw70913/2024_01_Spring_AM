@@ -83,7 +83,6 @@ public class UsrArticleController {
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
-		
 
 		// 사용자가 좋아요를 누른적이 없음
 
@@ -107,37 +106,6 @@ public class UsrArticleController {
 		rd.setData2("id", id);
 
 		return rd;
-
-	}
-
-	@RequestMapping("/usr/article/doIncreaseLikeCountRd")
-	@ResponseBody
-	public int doIncreaseLikeCountRd(HttpServletRequest req, int id) {
-
-		Rq rq = (Rq) req.getAttribute("rq");
-
-		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
-
-		int likeChecked = articleService.likeChecked(id, article.getMemberId());
-
-		int resultCode = 1;
-
-		if (likeChecked == 0) {
-			articleService.insertLike(article);
-			ResultData doIncreaseLikeCountRd = articleService.doIncreaseLikeCountRd(id);
-			resultCode = 1;
-		} else if (likeChecked == 0) {
-			ResultData doIncreaseLikeCountRd = articleService.doIncreaseLikeCountRd(id);
-			articleService.updateLikeCheck(article, 1);
-			resultCode = 1;
-		} else {
-			articleService.updateLikeCheck(article, 0);
-			articleService.doDecreaseLikeCount(id);
-			resultCode = 0;
-		}
-		articleService.getLikeCount(article);
-
-		return resultCode;
 
 	}
 
