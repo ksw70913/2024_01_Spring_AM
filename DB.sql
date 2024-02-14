@@ -145,7 +145,72 @@ WHERE id = 4;
 
 ALTER TABLE article ADD COLUMN hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER `body`;
 
+# reactionPoint 테이블 생성
+CREATE TABLE reactionPoint(
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    memberId INT(10) UNSIGNED NOT NULL,
+    relTypeCode CHAR(50) NOT NULL COMMENT '관련 데이터 타입 코드',
+    relId INT(10) NOT NULL COMMENT '관련 데이터 번호',
+    `point` INT(10) NOT NULL
+);
+
+# reactionPoint 테스트 데이터 생성
+# 1번 회원이 1번 글에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 1,
+relTypeCode = 'article',
+relId = 1,
+`point` = -1;
+
+# 1번 회원이 2번 글에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 1,
+relTypeCode = 'article',
+relId = 2,
+`point` = 1;
+
+# 2번 회원이 1번 글에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 1,
+`point` = -1;
+
+# 2번 회원이 2번 글에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 2,
+`point` = -1;
+
+# 3번 회원이 1번 글에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 1,
+`point` = 1;
+
 ###############################################
+
+SELECT * FROM article;
+
+SELECT * FROM `member`;
+
+SELECT * FROM `board`;
+
+SELECT * FROM reactionPoint;
 
 INSERT INTO article
 (
@@ -174,14 +239,7 @@ SELECT FLOOR(RAND() * 3) + 1
 SHOW FULL COLUMNS FROM `member`;
 DESC `member`;
 
-SELECT *
-FROM article;
 
-SELECT *
-FROM `member`;
-
-SELECT *
-FROM `board`;
 
 SELECT LAST_INSERT_ID();
 
@@ -206,3 +264,8 @@ WHERE 1
 			OR A.body LIKE CONCAT('%','0000','%')
 
 ORDER BY id DESC
+
+
+select hitCount
+from article
+where id = 374;

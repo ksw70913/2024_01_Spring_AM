@@ -14,6 +14,7 @@ import com.example.demo.service.BoardService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
+import com.example.demo.vo.Like;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
@@ -83,6 +84,11 @@ public class UsrArticleController {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
+		int likeChecked = articleService.likeChecked(id, article.getMemberId());
+
+		// 사용자가 좋아요를 누른적이 없음
+
+		model.addAttribute("likeCheck", likeChecked);
 		model.addAttribute("article", article);
 
 		return "usr/article/detail";
@@ -108,22 +114,32 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doIncreaseLikeCountRd")
 	@ResponseBody
-	public ResultData doIncreaseLikeCountRd(HttpServletRequest req, int id) {
+	public int doIncreaseLikeCountRd(HttpServletRequest req, int id) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
-		ResultData doIncreaseLikeCountRd = articleService.doIncreaseLikeCountRd(id);
+		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
-		if (doIncreaseLikeCountRd.isFail()) {
-			return doIncreaseLikeCountRd;
+		int likeChecked = articleService.likeChecked(id, article.getMemberId());
+
+		int resultCode = 1;
+
+		if (likeChecked == 0) {
+			articleService.insertLike(article);
+			ResultData doIncreaseLikeCountRd = articleService.doIncreaseLikeCountRd(id);
+			resultCode = 1;
+		} else if (likeChecked == 0) {
+			ResultData doIncreaseLikeCountRd = articleService.doIncreaseLikeCountRd(id);
+			articleService.updateLikeCheck(article, 1);
+			resultCode = 1;
+		} else {
+			articleService.updateLikeCheck(article, 0);
+			articleService.doDecreaseLikeCount(id);
+			resultCode = 0;
 		}
+		articleService.getLikeCount(article);
 
-		ResultData rd = ResultData.newData(doIncreaseLikeCountRd, "likeCount",
-				articleService.doIncreaseLikeCountRd(id));
-
-		rd.setData2("id", id);
-
-		return rd;
+		return resultCode;
 
 	}
 

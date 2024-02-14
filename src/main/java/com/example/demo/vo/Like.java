@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class Like {
 	int id;
 	int memberId;
+	int boardId;
+	int likeCheck;
 }

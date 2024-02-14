@@ -128,4 +128,26 @@ public class ArticleService {
 		return ResultData.from("S-1", "해당 게시물 좋아요 증가", "id", id);
 	}
 
+	public int likeChecked(int boardId, int memberId) {
+		return articleRepository.likeChecked(boardId, memberId);
+	}
+
+	public void insertLike(Article article) {
+		articleRepository.insertLike(article);
+	}
+
+	public void updateLikeCheck(Article article, int i) {
+		articleRepository.updateLikeCheck(article, i);
+
+	}
+
+	public void doDecreaseLikeCount(int id) {
+		articleRepository.doDecreaseLikeCount(id);
+	}
+
+	public void getLikeCount(Article article) {
+		articleRepository.getLikeCount(article);
+
+	}
+
 }

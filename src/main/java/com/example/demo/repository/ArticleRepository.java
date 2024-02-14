@@ -121,12 +121,51 @@ public interface ArticleRepository {
 			""")
 	public int increaseLikeCountRd(int id);
 
+	@Update("""
+			UPDATE article
+			SET likeCount = likeCount - 1
+			WHERE id = #{id}
+			""")
+	public void doDecreaseLikeCount(int id);
+
 	@Select("""
 			SELECT hitCount
 			FROM article
 			WHERE id = #{id}
 			""")
 	public int getArticleHitCount(int id);
+
+	@Select("""
+			SELECT likeCheck
+			FROM `like`
+			WHERE boardId = #{boardId}
+			AND memberId = #{memberId}
+			""")
+	public int likeChecked(int boardId, int memberId);
+
+	@Insert("""
+			INSERT INTO
+			`like` SET
+			boardId = #{article.getId()},
+			memberId = #{article.getMemberId()}
+			""")
+	public void insertLike(Article article);
+
+	@Update("""
+			UPDATE `like`
+			SET likeCheck = #{i}
+			WHERE boardId = #{article.getId()}
+			AND memberId = #{article.getMemberId()}
+			""")
+	public void updateLikeCheck(Article article, int i);
+
+	@Select("""
+			SELECT likeCount
+			FROM article
+			WHERE boardId = #{article.getId()}
+			AND memberId = #{article.getMemberId()}
+			""")
+	public void getLikeCount(Article article);
 
 	@Select("""
 			<script>

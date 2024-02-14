@@ -76,7 +76,18 @@
 				<a class="btn btn-outline" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;"
 					href="../article/doDelete?id=${article.id }">삭제</a>
 			</c:if>
-			<a class="btn btn-outline" href="../article/doIncreaseLikeCountRd?id=${article.id }">좋아요</a>
+			<c:choose>
+				<c:when test="${likeChecked eq '0' or empty likeChecked}">
+					<!-- likecheck가0이면 빈하트-->
+					<a class="btn btn-outline" href="../article/doIncreaseLikeCountRd?id=${article.id }">좋아요 누르기</a>
+				</c:when>
+				<c:otherwise>
+					<!-- likecheck가1이면 빨간 하트-->
+					<a class="btn btn-outline" href="../article/doIncreaseLikeCountRd?id=${article.id }">좋아요 취소</a>
+				</c:otherwise>
+			</c:choose>
+			<dd id="likeCount" style="margin-left: 5px;">${article.likeCount}</dd>
+
 		</div>
 	</div>
 </section>
