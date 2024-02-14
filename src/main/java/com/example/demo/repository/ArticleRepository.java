@@ -129,6 +129,14 @@ public interface ArticleRepository {
 			WHERE relId = #{id}
 			""")
 	public int increasePointRd(int id);
+	
+	@Update("""
+			UPDATE reactionPoint
+			SET updateDate = NOW(),
+			`point` = -1
+			WHERE relId = #{id}
+			""")
+	public int decreasePointRd(int id);
 
 	@Select("""
 			SELECT hitCount
@@ -175,5 +183,7 @@ public interface ArticleRepository {
 			""")
 	public List<Article> getForPrintArticles(int boardId, String searchKeywordTypeCode, String searchKeyword,
 			int limitFrom, int limitTake);
+
+
 
 }

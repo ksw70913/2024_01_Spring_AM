@@ -110,19 +110,36 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doIncreasePointRd")
 	@ResponseBody
-	public ResultData doIncreasePointRd(int id) {
+	public String doIncreasePointRd(int id) {
 
 		ResultData increasePointRd = articleService.increasePointRd(id);
 
 		if (increasePointRd.isFail()) {
-			return increasePointRd;
+			return Ut.jsHistoryBack("F-1", "이미 좋아요를 눌렀습니다.");
 		}
 
 		ResultData rd = ResultData.newData(increasePointRd, "hitCount", articleService.increasePointRd(id));
 
 		rd.setData2("id", id);
 
-		return rd;
+		return Ut.jsReplace(increasePointRd.getResultCode(), increasePointRd.getMsg(), "../article/detail?id=" + id);
+	}
+	
+	@RequestMapping("/usr/article/doDecreasePointRd")
+	@ResponseBody
+	public String doDecreasePointRd(int id) {
+
+		ResultData decreasePointRd = articleService.decreasePointRd(id);
+
+		if (decreasePointRd.isFail()) {
+			return Ut.jsHistoryBack("F-1", "이미 좋아요를 눌렀습니다.");
+		}
+
+		ResultData rd = ResultData.newData(decreasePointRd, "hitCount", articleService.decreasePointRd(id));
+
+		rd.setData2("id", id);
+
+		return Ut.jsReplace(decreasePointRd.getResultCode(), decreasePointRd.getMsg(), "../article/detail?id=" + id);
 	}
 
 	@RequestMapping("/usr/article/write")
