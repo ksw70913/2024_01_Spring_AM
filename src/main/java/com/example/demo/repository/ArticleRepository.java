@@ -34,12 +34,18 @@ public interface ArticleRepository {
 	public Article getArticle(int id);
 
 	@Select("""
-			SELECT A.*, M.nickname AS extra__writer
+			SELECT A.*, M.nickname AS extra__writer,
+			IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
+			IFNULL(SUM(IF(RP.point > 0, RP.point, 0)),0) AS extra__goodReactionPoint,
+			IFNULL(SUM(IF(RP.point < 0, RP.point, 0)),0) AS extra__badReactionPoint
 			FROM article AS A
 			INNER JOIN `member` AS M
 			ON A.memberId = M.id
+			LEFT JOIN reactionPoint AS RP
+			ON A.id = RP.relId AND RP.relTypeCode = 'article'
 			WHERE A.id = #{id}
-				""")
+			GROUP BY A.id
+			""")
 	public Article getForPrintArticle(int id);
 
 	@Delete("DELETE FROM article WHERE id = #{id}")
@@ -114,58 +120,12 @@ public interface ArticleRepository {
 			""")
 	public int increaseHitCount(int id);
 
-	@Update("""
-			UPDATE article
-			SET likeCount = likeCount + 1
-			WHERE id = #{id}
-			""")
-	public int increaseLikeCountRd(int id);
-
-	@Update("""
-			UPDATE article
-			SET likeCount = likeCount - 1
-			WHERE id = #{id}
-			""")
-	public void doDecreaseLikeCount(int id);
-
 	@Select("""
 			SELECT hitCount
 			FROM article
 			WHERE id = #{id}
 			""")
 	public int getArticleHitCount(int id);
-
-	@Select("""
-			SELECT likeCheck
-			FROM `like`
-			WHERE boardId = #{boardId}
-			AND memberId = #{memberId}
-			""")
-	public int likeChecked(int boardId, int memberId);
-
-	@Insert("""
-			INSERT INTO
-			`like` SET
-			boardId = #{article.getId()},
-			memberId = #{article.getMemberId()}
-			""")
-	public void insertLike(Article article);
-
-	@Update("""
-			UPDATE `like`
-			SET likeCheck = #{i}
-			WHERE boardId = #{article.getId()}
-			AND memberId = #{article.getMemberId()}
-			""")
-	public void updateLikeCheck(Article article, int i);
-
-	@Select("""
-			SELECT likeCount
-			FROM article
-			WHERE boardId = #{article.getId()}
-			AND memberId = #{article.getMemberId()}
-			""")
-	public void getLikeCount(Article article);
 
 	@Select("""
 			<script>
@@ -177,7 +137,7 @@ public interface ArticleRepository {
 			<if test="boardId != 0">
 				AND A.boardId = #{boardId}
 			</if>
-				<if test="searchKeyword != ''">
+			<if test="searchKeyword != ''">
 				<choose>
 					<when test="searchKeywordTypeCode == 'title'">
 						AND A.title LIKE CONCAT('%',#{searchKeyword},'%')
@@ -197,7 +157,7 @@ public interface ArticleRepository {
 			</if>
 			</script>
 			""")
-	public List<Article> getForPrintArticles(int boardId, String searchKeywordTypeCode, String searchKeyword,
-			int limitFrom, int limitTake);
+	public List<Article> getForPrintArticles(int boardId, int limitFrom, int limitTake, String searchKeywordTypeCode,
+			String searchKeyword);
 
 }

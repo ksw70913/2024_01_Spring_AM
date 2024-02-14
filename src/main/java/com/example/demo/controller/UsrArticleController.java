@@ -83,6 +83,7 @@ public class UsrArticleController {
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+		
 
 		// 사용자가 좋아요를 누른적이 없음
 
