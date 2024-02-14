@@ -89,6 +89,8 @@
 				<a class="btn btn-outline" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;"
 					href="../article/doDelete?id=${article.id }">삭제</a>
 			</c:if>
+			<a class="btn btn-outline" href="../article/doIncreasePointRd?id=${article.id }">좋아요</a>
+			<a class="btn btn-outline" href="../article/modify?id=${article.id }">싫어요</a>
 		</div>
 	</div>
 </section>

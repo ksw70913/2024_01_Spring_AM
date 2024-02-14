@@ -14,7 +14,6 @@ import com.example.demo.service.BoardService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
-import com.example.demo.vo.Like;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
@@ -107,6 +106,23 @@ public class UsrArticleController {
 
 		return rd;
 
+	}
+
+	@RequestMapping("/usr/article/doIncreasePointRd")
+	@ResponseBody
+	public ResultData doIncreasePointRd(int id) {
+
+		ResultData increasePointRd = articleService.increasePointRd(id);
+
+		if (increasePointRd.isFail()) {
+			return increasePointRd;
+		}
+
+		ResultData rd = ResultData.newData(increasePointRd, "hitCount", articleService.increasePointRd(id));
+
+		rd.setData2("id", id);
+
+		return rd;
 	}
 
 	@RequestMapping("/usr/article/write")

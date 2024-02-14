@@ -34,10 +34,11 @@ public interface ArticleRepository {
 	public Article getArticle(int id);
 
 	@Select("""
+			<script>
 			SELECT A.*, M.nickname AS extra__writer,
 			IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
-			IFNULL(SUM(IF(RP.point > 0, RP.point, 0)),0) AS extra__goodReactionPoint,
-			IFNULL(SUM(IF(RP.point < 0, RP.point, 0)),0) AS extra__badReactionPoint
+			IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)),0) AS extra__goodReactionPoint,
+			IFNULL(SUM(IF(RP.point &lt; 0, RP.point, 0)),0) AS extra__badReactionPoint
 			FROM article AS A
 			INNER JOIN `member` AS M
 			ON A.memberId = M.id
@@ -45,6 +46,7 @@ public interface ArticleRepository {
 			ON A.id = RP.relId AND RP.relTypeCode = 'article'
 			WHERE A.id = #{id}
 			GROUP BY A.id
+			</script>
 			""")
 	public Article getForPrintArticle(int id);
 
@@ -120,6 +122,14 @@ public interface ArticleRepository {
 			""")
 	public int increaseHitCount(int id);
 
+	@Update("""
+			UPDATE reactionPoint
+			SET updateDate = NOW(),
+			`point` = 1
+			WHERE relId = #{id}
+			""")
+	public int increasePointRd(int id);
+
 	@Select("""
 			SELECT hitCount
 			FROM article
@@ -129,10 +139,10 @@ public interface ArticleRepository {
 
 	@Select("""
 			<script>
-			SELECT A.*, M.nickname AS extra__writer,
+			SELECT A.*,
 			IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
-			IFNULL(SUM(IF(RP.point > 0, RP.point, 0)),0) AS extra__goodReactionPoint,
-			IFNULL(SUM(IF(RP.point = -1, RP.point, 0)),0) AS extra__badReactionPoint
+			IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)),0) AS extra__goodReactionPoint,
+			IFNULL(SUM(IF(RP.point &lt; 0, RP.point, 0)),0) AS extra__badReactionPoint, M.nickname AS extra__writer
 			FROM article AS A
 			INNER JOIN `member` AS M
 			ON A.memberId = M.id

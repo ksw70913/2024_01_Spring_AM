@@ -101,6 +101,16 @@ public class ArticleService {
 
 	}
 
+	public ResultData increasePointRd(int id) {
+		int affectedRow = articleRepository.increasePointRd(id);
+
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "해당 게시물 없음", "id", id);
+		}
+
+		return ResultData.from("S-1", "해당 게시물 좋아요 증가", "id", id);
+	}
+
 	public Object getArticleHitCount(int id) {
 		return articleRepository.getArticleHitCount(id);
 	}
