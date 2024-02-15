@@ -10,8 +10,6 @@ import com.example.demo.util.Ut;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 @Controller
 public class UsrReactionPointController {
 
@@ -25,7 +23,7 @@ public class UsrReactionPointController {
 
 	@RequestMapping("/usr/reactionPoint/doGoodReaction")
 	@ResponseBody
-	public ResultData doGoodReaction(String relTypeCode, int relId, String replaceUri) {
+	public Object doGoodReaction(String relTypeCode, int relId, String replaceUri) {
 
 		ResultData usersReactionRd = reactionPointService.usersReaction(rq.getLoginedMemberId(), relTypeCode, relId);
 
@@ -33,11 +31,11 @@ public class UsrReactionPointController {
 
 		if (usersReaction == 1) {
 			ResultData rd = reactionPointService.deleteGoodReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			return ResultData.from("S-1", "좋아요 취소");
+			return Ut.jsReplace("S-1", "좋아요 취소", replaceUri);
 		} else if (usersReaction == -1) {
 			ResultData rd = reactionPointService.deleteBadReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
 			rd = reactionPointService.addGoodReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			return ResultData.from("S-2", "싫어요 눌렀잖어");
+			return Ut.jsReplace("S-2", "싫어요 눌렀잖어", replaceUri);
 		}
 
 		ResultData reactionRd = reactionPointService.addGoodReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
@@ -46,12 +44,12 @@ public class UsrReactionPointController {
 			return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg());
 		}
 
-		return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg());
+		return Ut.jsReplace(reactionRd.getResultCode(), reactionRd.getMsg(), replaceUri);
 	}
 
 	@RequestMapping("/usr/reactionPoint/doBadReaction")
 	@ResponseBody
-	public ResultData doBadReaction(String relTypeCode, int relId, String replaceUri) {
+	public Object doBadReaction(String relTypeCode, int relId, String replaceUri) {
 
 		ResultData usersReactionRd = reactionPointService.usersReaction(rq.getLoginedMemberId(), relTypeCode, relId);
 
@@ -59,11 +57,11 @@ public class UsrReactionPointController {
 
 		if (usersReaction == -1) {
 			ResultData rd = reactionPointService.deleteBadReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			return ResultData.from("S-1", "싫어요 취소");
+			return Ut.jsReplace("S-1", "싫어요 취소", replaceUri);
 		} else if (usersReaction == 1) {
 			ResultData rd = reactionPointService.deleteGoodReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
 			rd = reactionPointService.addBadReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			return ResultData.from("S-2", "좋아요 눌렀잖어");
+			return Ut.jsReplace("S-2", "좋아요 눌렀잖어", replaceUri);
 		}
 
 		ResultData reactionRd = reactionPointService.addBadReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
@@ -72,7 +70,7 @@ public class UsrReactionPointController {
 			return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg());
 		}
 
-		return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg());
+		return Ut.jsReplace(reactionRd.getResultCode(), reactionRd.getMsg(), replaceUri);
 	}
 
 }
