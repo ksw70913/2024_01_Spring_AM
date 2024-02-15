@@ -166,4 +166,11 @@ public interface ArticleRepository {
 			""")
 	public int increaseGoodReactionPoint(int relId);
 
+	@Update("""
+			UPDATE article
+			SET badReactionPoint = badReactionPoint + 1
+			WHERE id = #{relId}
+			""")
+	public int decreaseGoodReactionPoint(int relId);
+
 }

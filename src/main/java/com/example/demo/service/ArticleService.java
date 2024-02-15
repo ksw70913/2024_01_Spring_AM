@@ -128,4 +128,14 @@ public class ArticleService {
 		return ResultData.from(null, null);
 	}
 
+	public ResultData decreaseGoodReactionPoint(int relId) {
+		int affectedRow = articleRepository.decreaseGoodReactionPoint(relId);
+
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "없는 게시물");
+		}
+
+		return ResultData.from(null, null);
+	}
+
 }

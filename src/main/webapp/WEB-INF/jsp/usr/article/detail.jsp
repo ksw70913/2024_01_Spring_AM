@@ -67,7 +67,8 @@
 					<th>추천 ${usersReaction }</th>
 					<td><a
 						href="/usr/reactionPoint/doGoodReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.currentUri}"
-						class="reaction btn btn-outline btn-success">좋아요</a> &nbsp;&nbsp; <a href="/usr/reactionPoint/doBadReaction"
+						class="reaction btn btn-outline btn-success">좋아요</a> &nbsp;&nbsp; <a
+						href="/usr/reactionPoint/doBadReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.currentUri}"
 						class="reaction btn btn-outline btn-error">싫어요</a></td>
 				</tr>
 				<tr>

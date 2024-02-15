@@ -27,4 +27,15 @@ public interface ReactionPointRepository {
 			""")
 	public int increaseReactionPoint(int memberId, String relTypeCode, int relId);
 
+	@Insert("""
+			INSERT INTO reactionPoint
+			SET regDate = NOW(),
+			updateDate = NOW(),
+			relTypeCode = #{relTypeCode},
+			relId = #{relId},
+			memberId = #{memberId},
+			`point` = -1
+			""")
+	public int decreaseReactionPoint(int memberId, String relTypeCode, int relId);
+
 }
