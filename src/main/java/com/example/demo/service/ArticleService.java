@@ -101,32 +101,12 @@ public class ArticleService {
 
 	}
 
-	public ResultData increasePointRd(int id) {
-		int affectedRow = articleRepository.increasePointRd(id);
-
-		if (affectedRow == 0) {
-			return ResultData.from("F-1", "해당 게시물 없음", "id", id);
-		}
-
-		return ResultData.from("S-1", "해당 게시물 좋아요 증가", "id", id);
-	}
-
-	public ResultData decreasePointRd(int id) {
-		int affectedRow = articleRepository.decreasePointRd(id);
-
-		if (affectedRow == 0) {
-			return ResultData.from("F-1", "해당 게시물 없음", "id", id);
-		}
-
-		return ResultData.from("S-1", "해당 게시물 싫어요 증가", "id", id);
-	}
-
 	public Object getArticleHitCount(int id) {
 		return articleRepository.getArticleHitCount(id);
 	}
 
-	public List<Article> getForPrintArticles(int boardId, String searchKeywordTypeCode, String searchKeyword,
-			int itemsInAPage, int page) {
+	public List<Article> getForPrintArticles(int boardId, int itemsInAPage, int page, String searchKeywordTypeCode,
+			String searchKeyword) {
 
 //		SELECT * FROM article WHERE boardId = 1 ORDER BY id DESC LIMIT 0, 10; 1page
 //		SELECT * FROM article WHERE boardId = 1 ORDER BY id DESC LIMIT 10, 10; 2page
@@ -134,8 +114,8 @@ public class ArticleService {
 		int limitFrom = (page - 1) * itemsInAPage;
 		int limitTake = itemsInAPage;
 
-		return articleRepository.getForPrintArticles(boardId, searchKeywordTypeCode, searchKeyword, limitFrom,
-				limitTake);
+		return articleRepository.getForPrintArticles(boardId, limitFrom, limitTake, searchKeywordTypeCode,
+				searchKeyword);
 	}
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.ReactionPointService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
@@ -31,6 +32,9 @@ public class UsrArticleController {
 	@Autowired
 	private BoardService boardService;
 
+	@Autowired
+	private ReactionPointService reactionPointService;
+
 	public UsrArticleController() {
 
 	}
@@ -42,6 +46,7 @@ public class UsrArticleController {
 			@RequestParam(defaultValue = "1") int page,
 			@RequestParam(defaultValue = "title,body") String searchKeywordTypeCode,
 			@RequestParam(defaultValue = "") String searchKeyword) {
+
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Board board = boardService.getBoardById(boardId);
@@ -52,6 +57,9 @@ public class UsrArticleController {
 			return rq.historyBackOnView("없는 게시판이야");
 		}
 
+		// 한페이지에 글 10개씩이야
+		// 글 20개 -> 2 page
+		// 글 24개 -> 3 page
 		int itemsInAPage = 10;
 
 		int totalPage = (int) Math.ceil(articlesCount / (double) itemsInAPage);
@@ -61,8 +69,9 @@ public class UsrArticleController {
 		int from = ((pageGroup - 1) * pageSize) + 1; // 한번에 보여줄 때의 첫번째 페이지 번호
 		int end = pageGroup * pageSize; // 한번에 보여줄 때의 마지막 페이지 번호
 
-		List<Article> articles = articleService.getForPrintArticles(boardId, searchKeywordTypeCode, searchKeyword,
-				itemsInAPage, page);
+		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchKeywordTypeCode,
+				searchKeyword);
+
 		req.setAttribute("searchKeyword", searchKeyword);
 		req.setAttribute("page", page);
 		req.setAttribute("totalPage", totalPage);
@@ -70,7 +79,11 @@ public class UsrArticleController {
 		req.setAttribute("pageGroup", pageGroup);
 		req.setAttribute("from", from);
 		req.setAttribute("end", end);
+
 		model.addAttribute("board", board);
+		model.addAttribute("boardId", boardId);
+		model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
+		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("articles", articles);
 
@@ -83,9 +96,11 @@ public class UsrArticleController {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
-		// 사용자가 좋아요를 누른적이 없음
+		// -1 싫어요, 0 표현 x, 1 좋아요
+		int usersReaction = reactionPointService.usersReaction(rq.getLoginedMemberId(), "article", id);
 
 		model.addAttribute("article", article);
+		model.addAttribute("usersReaction", usersReaction);
 
 		return "usr/article/detail";
 	}
@@ -106,40 +121,6 @@ public class UsrArticleController {
 
 		return rd;
 
-	}
-
-	@RequestMapping("/usr/article/doIncreasePointRd")
-	@ResponseBody
-	public String doIncreasePointRd(int id) {
-
-		ResultData increasePointRd = articleService.increasePointRd(id);
-
-		if (increasePointRd.isFail()) {
-			return Ut.jsHistoryBack("F-1", "이미 좋아요를 눌렀습니다.");
-		}
-
-		ResultData rd = ResultData.newData(increasePointRd, "hitCount", articleService.increasePointRd(id));
-
-		rd.setData2("id", id);
-
-		return Ut.jsReplace(increasePointRd.getResultCode(), increasePointRd.getMsg(), "../article/detail?id=" + id);
-	}
-	
-	@RequestMapping("/usr/article/doDecreasePointRd")
-	@ResponseBody
-	public String doDecreasePointRd(int id) {
-
-		ResultData decreasePointRd = articleService.decreasePointRd(id);
-
-		if (decreasePointRd.isFail()) {
-			return Ut.jsHistoryBack("F-1", "이미 좋아요를 눌렀습니다.");
-		}
-
-		ResultData rd = ResultData.newData(decreasePointRd, "hitCount", articleService.decreasePointRd(id));
-
-		rd.setData2("id", id);
-
-		return Ut.jsReplace(decreasePointRd.getResultCode(), decreasePointRd.getMsg(), "../article/detail?id=" + id);
 	}
 
 	@RequestMapping("/usr/article/write")
