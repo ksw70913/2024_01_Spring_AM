@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 public interface ReactionPointRepository {
 
 	@Select("""
-			SELECT IFNULL(SUM(RP.point),0)
+			SELECT COUNT(RP.point)
 			FROM reactionPoint AS RP
 			WHERE RP.relTypeCode = #{relTypeCode}
 			AND RP.relId = #{relId}
