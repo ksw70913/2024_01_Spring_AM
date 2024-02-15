@@ -82,6 +82,7 @@ public class UsrArticleController {
 
 		model.addAttribute("board", board);
 		model.addAttribute("boardId", boardId);
+		model.addAttribute("page", page);
 		model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("articlesCount", articlesCount);
@@ -96,11 +97,17 @@ public class UsrArticleController {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
-		// -1 싫어요, 0 표현 x, 1 좋아요
-		int usersReaction = reactionPointService.usersReaction(rq.getLoginedMemberId(), "article", id);
+		ResultData usersReactionRd = reactionPointService.usersReaction(rq.getLoginedMemberId(), "article", id);
+
+		if (usersReactionRd.isSuccess()) {
+			model.addAttribute("userCanMakeReaction", usersReactionRd.isSuccess());
+		}
 
 		model.addAttribute("article", article);
-		model.addAttribute("usersReaction", usersReaction);
+		model.addAttribute("isAlreadyAddGoodRp",
+				reactionPointService.isAlreadyAddGoodRp(rq.getLoginedMemberId(), id, "article"));
+		model.addAttribute("isAlreadyAddBadRp",
+				reactionPointService.isAlreadyAddBadRp(rq.getLoginedMemberId(), id, "article"));
 
 		return "usr/article/detail";
 	}

@@ -96,7 +96,6 @@ public class Rq {
 		System.out.println(currentUri);
 
 		return currentUri;
-
 	}
 
 }

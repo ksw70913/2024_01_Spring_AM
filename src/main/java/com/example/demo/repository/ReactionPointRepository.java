@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -8,7 +9,7 @@ import org.apache.ibatis.annotations.Select;
 public interface ReactionPointRepository {
 
 	@Select("""
-			SELECT COUNT(RP.point)
+			SELECT IFNULL(SUM(RP.point),0)
 			FROM reactionPoint AS RP
 			WHERE RP.relTypeCode = #{relTypeCode}
 			AND RP.relId = #{relId}
@@ -25,7 +26,7 @@ public interface ReactionPointRepository {
 			memberId = #{memberId},
 			`point` = 1
 			""")
-	public int increaseReactionPoint(int memberId, String relTypeCode, int relId);
+	public int addGoodReactionPoint(int memberId, String relTypeCode, int relId);
 
 	@Insert("""
 			INSERT INTO reactionPoint
@@ -36,6 +37,14 @@ public interface ReactionPointRepository {
 			memberId = #{memberId},
 			`point` = -1
 			""")
-	public int decreaseReactionPoint(int memberId, String relTypeCode, int relId);
+	public int addBadReactionPoint(int memberId, String relTypeCode, int relId);
+
+	@Delete("""
+			DELETE FROM reactionPoint
+			WHERE memberId = #{memberId}
+			AND relTypeCode = #{relTypeCode}
+			AND relId = #{relId}
+			""")
+	public void deleteReactionPoint(int memberId, String relTypeCode, int relId);
 
 }
