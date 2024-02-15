@@ -51,8 +51,9 @@
 			return;
 		}
 	}
-	
+
 	function doGoodReaction(articleId) {
+		
 		$.ajax({
 			url: '/usr/reactionPoint/doGoodReaction',
 			type: 'POST',
@@ -67,29 +68,46 @@
 					
 					if(data.resultCode == 'S-1'){
 						likeButton.toggleClass('btn-outline');
-						likeCount.text(parseInt(likeCount.text()) - 1);
+						likeCount.text(parseInt(likeCount.text()) + 1);
+						console.log(1);
+						console.log('likeCount.text() : ' + likeCount.text());
+						console.log('DislikeCount.text() : ' + DislikeCount.text());
 					}else if(data.resultCode == 'S-2'){
 						DislikeButton.toggleClass('btn-outline');
 						DislikeCount.text(parseInt(DislikeCount.text()) - 1);
+						console.log('likeCount.text() : ' + likeCount.text());
+						console.log('DislikeCount.text() : ' + DislikeCount.text());
 						likeButton.toggleClass('btn-outline');
 						likeCount.text(parseInt(likeCount.text()) + 1);
+						console.log(2);
+						console.log('likeCount.text() : ' + likeCount.text());
+						console.log('DislikeCount.text() : ' + DislikeCount.text());
 					}else {
 						likeButton.toggleClass('btn-outline');
 						likeCount.text(parseInt(likeCount.text()) + 1);
+						console.log(3);
+						console.log('likeCount.text() : ' + likeCount.text());
+						console.log('DislikeCount.text() : ' + DislikeCount.text());
 					}
+					
 				}else {
 					alert(data.msg);
 				}
+		
 			},
 			error: function(jqXHR,textStatus,errorThrown) {
 				alert('좋아요 오류 발생 : ' + textStatus);
+
 			}
 			
 		});
 	}
 	
+	
+	
 	function doBadReaction(articleId) {
-		$.ajax({
+		
+	 $.ajax({
 			url: '/usr/reactionPoint/doBadReaction',
 			type: 'POST',
 			data: {relTypeCode: 'article', relId: articleId},
@@ -103,16 +121,28 @@
 					
 					if(data.resultCode == 'S-1'){
 						DislikeButton.toggleClass('btn-outline');
-						DislikeButton.text(parseInt(DislikeButton.text()) - 1);
+						DislikeCount.text(parseInt(DislikeCount.text()) + 1);
+						console.log(4);
+						console.log('likeCount.text() : ' + likeCount.text());
+						console.log('DislikeCount.text() : ' + DislikeCount.text());
 					}else if(data.resultCode == 'S-2'){
 						likeButton.toggleClass('btn-outline');
-						likeCount.text(parseInt(DislikeCount.text()) - 1);
+						likeCount.text(parseInt(likeCount.text()) - 1);
+						console.log('likeCount.text() : ' + likeCount.text());
+						console.log('DislikeCount.text() : ' + DislikeCount.text());
 						DislikeButton.toggleClass('btn-outline');
 						DislikeCount.text(parseInt(DislikeCount.text()) + 1);
+						console.log(5);
+						console.log('likeCount.text() : ' + likeCount.text());
+						console.log('DislikeCount.text() : ' + DislikeCount.text());
 					}else {
 						DislikeButton.toggleClass('btn-outline');
 						DislikeCount.text(parseInt(DislikeCount.text()) + 1);
+						console.log(6);
+						console.log('likeCount.text() : ' + likeCount.text());
+						console.log('DislikeCount.text() : ' + DislikeCount.text());
 					}
+			
 				}else {
 					alert(data.msg);
 				}
@@ -151,12 +181,12 @@
 					<td>${article.extra__writer }</td>
 				</tr>
 				<tr>
-					<th class="reaction">좋아요</th>
-					<td>${article.goodReactionPoint }</td>
+					<th>좋아요</th>
+					<td id="likeCount">${article.goodReactionPoint }</td>
 				</tr>
 				<tr>
 					<th>싫어요</th>
-					<td>${article.badReactionPoint }</td>
+					<td id="DislikeCount">${article.badReactionPoint }</td>
 				</tr>
 				<tr>
 					<th>추천 ${usersReaction }</th>
