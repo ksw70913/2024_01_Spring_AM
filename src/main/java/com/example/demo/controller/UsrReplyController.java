@@ -5,9 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.service.ReactionPointService;
 import com.example.demo.service.ReplyService;
 import com.example.demo.util.Ut;
-import com.example.demo.vo.Article;
+import com.example.demo.vo.Reply;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
@@ -22,17 +23,26 @@ public class UsrReplyController {
 	@Autowired
 	private ReplyService replyService;
 
+	@Autowired
+	private ReactionPointService reactionPointService;
+
 	@RequestMapping("/usr/reply/doWriteReply")
 	@ResponseBody
-	public String doWriteReply(HttpServletRequest req, String relTypeCode, int relId, int memberId, String body) {
+	public String doWrite(HttpServletRequest req, String relTypeCode, int relId, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
-		if (Ut.isNullOrEmpty(body)) {
+		if (Ut.isNullOrEmpty(relTypeCode)) {
+			return Ut.jsHistoryBack("F-1", "내용을 입력해주세요");
+		}
+		if (Ut.isEmpty(relId)) {
 			return Ut.jsHistoryBack("F-2", "내용을 입력해주세요");
 		}
+		if (Ut.isNullOrEmpty(body)) {
+			return Ut.jsHistoryBack("F-3", "내용을 입력해주세요");
+		}
 
-		ResultData writeReplyRd = replyService.writeReply(relTypeCode, relId, memberId, body);
+		ResultData<Integer> writeReplyRd = replyService.writeReply(rq.getLoginedMemberId(), relTypeCode, relId, body);
 
 		int id = (int) writeReplyRd.getData1();
 

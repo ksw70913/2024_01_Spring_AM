@@ -20,17 +20,16 @@ public class ReplyService {
 		this.replyRepository = replyRepository;
 	}
 
-	public ResultData writeReply(String relTypeCode, int relId, int memberId, String body) {
+	public List<Reply> getForPrintReplies(int loginedMemberId, String relTypeCode, int relId) {
+		return replyRepository.getForPrintReplies(loginedMemberId, relTypeCode, relId);
+	}
 
-		replyRepository.writeReply(relTypeCode, relId, memberId, body);
+	public ResultData<Integer> writeReply(int loginedMemberId, String relTypeCode, int relId, String body) {
+		replyRepository.writeReply(loginedMemberId, relTypeCode, relId, body);
 
 		int id = replyRepository.getLastInsertId();
 
 		return ResultData.from("S-1", Ut.f("%d번 댓글이 생성되었습니다", id), "id", id);
-	}
-
-	public List<Reply> showReplys(int id) {
-		return replyRepository.showReplys(id);
 	}
 
 }

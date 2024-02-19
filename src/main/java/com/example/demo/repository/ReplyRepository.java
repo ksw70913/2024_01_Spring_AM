@@ -11,26 +11,29 @@ import com.example.demo.vo.Reply;
 @Mapper
 public interface ReplyRepository {
 
-	@Insert("""
-			INSERT INTO
-			reply SET
-			regDate = NOW(),
-			updateDate = NOW(),
-			memberId = #{memberId},
-			reltypeCode = #{relTypeCode},
-			relId = #{relId},
-			`body` = #{body}
+	@Select("""
+				SELECT R.*, M.nickname AS extra__writer
+				FROM reply AS R
+				INNER JOIN `member` AS M
+				ON R.memberId = M.id
+				WHERE relTypeCode = #{relTypeCode}
+				AND relId = #{relId}
+				ORDER BY R.id ASC;
 			""")
-	public void writeReply(String relTypeCode, int relId, int memberId, String body);
+	List<Reply> getForPrintReplies(int loginedMemberId, String relTypeCode, int relId);
+
+	@Insert("""
+				INSERT INTO reply
+				SET regDate = NOW(),
+				updateDate = NOW(),
+				memberId = #{loginedMemberId},
+				relTypeCode = #{relTypeCode},
+				relId = #{relId},
+				`body` = #{body}
+			""")
+	void writeReply(int loginedMemberId, String relTypeCode, int relId, String body);
 
 	@Select("SELECT LAST_INSERT_ID()")
 	public int getLastInsertId();
 
-	@Select("""
-			SELECT *
-			FROM reply
-			WHERE relId = #{id}
-			ORDER BY id DESC
-			""")
-	public List<Reply> showReplys(int id);
 }

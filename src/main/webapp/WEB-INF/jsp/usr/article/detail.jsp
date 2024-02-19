@@ -11,6 +11,8 @@
 	params.id = parseInt('${param.id}');
 	params.memberId = parseInt('${loginedMemberId}');
 	
+	const replyparams = {};
+	
 	console.log(params);
 	console.log(params.memberId);
 	
@@ -266,6 +268,7 @@
 	</div>
 </section>
 
+<h2>댓글 리스트(${repliesCount })</h2>
 <div>
 	<table class="table-box-1 table" border="1">
 		<colgroup>
@@ -279,14 +282,25 @@
 				<th>날짜</th>
 				<th>이름</th>
 				<th>내용</th>
+				<th>좋아요</th>
+				<th>싫어요</th>
+				<th>추천 ${usersReaction }</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="reply" items="${reply }">
+			<c:forEach var="replies" items="${replies }">
 				<tr class="hover">
-					<td>${reply.regDate.substring(0,10) }</td>
-					<td>${reply.memberId }</td>
-					<td>${reply.body }</td>
+					<td>${replies.regDate.substring(0,10) }</td>
+					<td>${replies.memberId }</td>
+					<td>${replies.body }</td>
+					<td>${replies.goodReactionPoint }</td>
+					<td>${replies.badReactionPoint }</td>
+					<td>
+						<!-- href="/usr/reactionPoint/doGoodReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.currentUri}" -->
+						<button id="likeButton" class="btn btn-outline btn-success" onclick="doGoodReaction(${param.id})">좋아요</button>
+
+						<button id="DislikeButton" class="btn btn-outline btn-error" onclick="doBadReaction(${param.id})">싫어요</button>
+					</td>
 					<td><a class="btn btn-outline" href="../reply/modify?id=${reply.id }">수정</a></td>
 				</tr>
 			</c:forEach>

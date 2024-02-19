@@ -108,9 +108,12 @@ public class UsrArticleController {
 			model.addAttribute("userCanMakeReaction", usersReactionRd.isSuccess());
 		}
 
-		List<Reply> replys = replyService.showReplys(id);
+		List<Reply> replies = replyService.getForPrintReplies(rq.getLoginedMemberId(), "article", id);
 
-		model.addAttribute("reply", replys);
+		int repliesCount = replies.size();
+
+		model.addAttribute("repliesCount", repliesCount);
+		model.addAttribute("replies", replies);
 		model.addAttribute("article", article);
 		model.addAttribute("isAlreadyAddGoodRp",
 				reactionPointService.isAlreadyAddGoodRp(rq.getLoginedMemberId(), id, "article"));
