@@ -50,25 +50,25 @@ public class UsrReplyController {
 
 	}
 
-	@RequestMapping("/usr/reply/doModifyReply")
-	@ResponseBody
-	public String doModifyReply(HttpServletRequest req, int id, int relId, int memberId, String body) {
-
-		Rq rq = (Rq) req.getAttribute("rq");
-
-		Reply reply = replyService.getReply(id);
-
-		if (article == null) {
-			return Ut.jsHistoryBack("F-1", Ut.f("%d번 글은 존재하지 않습니다", id));
-		}
-
-		ResultData loginedMemberCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
-
-		if (loginedMemberCanModifyRd.isSuccess()) {
-			articleService.modifyArticle(id, title, body);
-		}
-
-		return Ut.jsReplace(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg(),
-				"../article/detail?id=" + id);
-	}
+//	@RequestMapping("/usr/reply/doModifyReply")
+//	@ResponseBody
+//	public String doModifyReply(HttpServletRequest req, int id, int relId, int memberId, String body) {
+//
+//		Rq rq = (Rq) req.getAttribute("rq");
+//
+//		Reply reply = replyService.getReply(id);
+//
+//		if (article == null) {
+//			return Ut.jsHistoryBack("F-1", Ut.f("%d번 글은 존재하지 않습니다", id));
+//		}
+//
+//		ResultData loginedMemberCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
+//
+//		if (loginedMemberCanModifyRd.isSuccess()) {
+//			articleService.modifyArticle(id, title, body);
+//		}
+//
+//		return Ut.jsReplace(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg(),
+//				"../article/detail?id=" + id);
+//	}
 }

@@ -167,7 +167,6 @@
 	}
 	
 	<!-- 댓글 -->
-	<script>
 			var ReplyWrite__submitDone = false;
 			function ReplyWrite__submit(form) {
 				if (ReplyWrite__submitDone) {
@@ -186,12 +185,10 @@
 				ReplyWrite__submitDone = true;
 				form.submit();
 			}
-		</script>
 
-<script>
 	//-------------------------------//
 	
-		function checkRP2() {
+		 function checkRP2() {
 		if(isAlreadyAddGoodRp == true){
 			$('#likeButton2').toggleClass('btn-outline');
 		}else if(isAlreadyAddBadRp == true){
