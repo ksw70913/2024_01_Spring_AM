@@ -287,6 +287,7 @@
 					<td>${reply.regDate.substring(0,10) }</td>
 					<td>${reply.memberId }</td>
 					<td>${reply.body }</td>
+					<td><a class="btn btn-outline" href="../reply/modify?id=${reply.id }">수정</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
