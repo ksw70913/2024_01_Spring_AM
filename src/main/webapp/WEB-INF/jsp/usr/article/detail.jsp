@@ -164,6 +164,36 @@
 		});
 	}
 	
+/* 	$(document).ready(function)(){
+		getReplyList();
+	})
+	
+	function getReplyList(){
+		var memberId = $('input[name=loginedMemberId]').val();
+		
+		$.ajax({
+			type: 'GET',
+			url : '/getReplyList',
+			data : {loginedMemberId},
+			success : function(result){
+				console.log(result);
+				for(var i =0; i<result.length;i++){
+					var str = "<div class=\"reply\">"
+					str += result[i].content+"</div></hr>"
+					$("#reply").append(str);
+				}
+			},
+			error : function(result) {
+				complate : function(){
+					
+				}
+			}
+		})
+	} */
+	
+	
+	
+	
 	$(function() {
 		checkRP();
 	});
@@ -209,9 +239,7 @@
 				</tr>
 				<tr>
 					<th>조회수</th>
-					<td>
-						<span class="article-detail__hit-count">${article.hitCount }</span>
-					</td>
+					<td><span class="article-detail__hit-count">${article.hitCount }</span></td>
 				</tr>
 				<tr>
 					<th>제목</th>
@@ -224,6 +252,7 @@
 
 			</tbody>
 		</table>
+
 		<div class="btns mt-5">
 			<button class="btn btn-outline" type="button" onclick="history.back();">뒤로가기</button>
 			<c:if test="${article.userCanModify }">
@@ -236,6 +265,49 @@
 		</div>
 	</div>
 </section>
+
+<div>
+	<table class="table-box-1 table" border="1">
+		<colgroup>
+			<col style="width: 10%" />
+			<col style="width: 20%" />
+			<col style="width: 60%" />
+			<col style="width: 10%" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th>날짜</th>
+				<th>이름</th>
+				<th>내용</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach var="reply" items="${reply }">
+				<tr class="hover">
+					<td>${reply.regDate.substring(0,10) }</td>
+					<td>${reply.memberId }</td>
+					<td>${reply.body }</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+</div>
+
+
+<!-- Comments Form -->
+<div class="card my-4">
+	<h5 class="card-header">Leave a Comment:</h5>
+	<div class="card-body">
+		<form name="comment-form" action="../reply/doWriteReply" method="post" autocomplete="off">
+			<div class="form-group">
+				<input type="hidden" name="memberId" value="${loginedMemberId }" /> <input type="hidden" name="relTypeCode"
+					value="article" /> <input type="hidden" name="relId" value="${article.id }" />
+				<textarea name="body" class="form-control"></textarea>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
+</div>
 
 
 
