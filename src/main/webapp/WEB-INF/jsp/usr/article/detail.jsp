@@ -11,8 +11,6 @@
 	params.id = parseInt('${param.id}');
 	params.memberId = parseInt('${loginedMemberId}');
 	
-	const replyparams = {};
-	
 	console.log(params);
 	console.log(params.memberId);
 	
@@ -59,6 +57,8 @@
 			return;
 		}
 	}
+	
+
 	
 	function doGoodReaction(articleId) {
 		if(isNaN(params.memberId) == true){
@@ -166,38 +166,155 @@
 		});
 	}
 	
-/* 	$(document).ready(function)(){
-		getReplyList();
-	})
+	<!-- 댓글 -->
+	<script>
+			var ReplyWrite__submitDone = false;
+			function ReplyWrite__submit(form) {
+				if (ReplyWrite__submitDone) {
+					alert('이미 처리중입니다');
+					return;
+				}
+				console.log(123);
+				
+				console.log(form.body.value);
+				
+				if (form.body.value.length < 3) {
+					alert('댓글은 3글자 이상 입력해');
+					form.body.focus();
+					return;
+				}
+				ReplyWrite__submitDone = true;
+				form.submit();
+			}
+		</script>
+
+<script>
+	//-------------------------------//
 	
-	function getReplyList(){
-		var memberId = $('input[name=loginedMemberId]').val();
+		function checkRP2() {
+		if(isAlreadyAddGoodRp == true){
+			$('#likeButton2').toggleClass('btn-outline');
+		}else if(isAlreadyAddBadRp == true){
+			$('#DislikeButton2').toggleClass('btn-outline');
+		}else {
+			return;
+		}
+	}
+	
+		function doGoodReaction2(articleId) {
+		if(isNaN(params.memberId) == true){
+			if(confirm('로그인 해야해. 로그인 페이지로 가실???')){
+				var currentUri = encodeURIComponent(window.location.href);
+				window.location.href = '../member/login?afterLoginUri=' + currentUri; // 로그인 페이지에 원래 페이지의 uri를 같이 보냄
+			}
+			return;
+		}
 		
 		$.ajax({
-			type: 'GET',
-			url : '/getReplyList',
-			data : {loginedMemberId},
-			success : function(result){
-				console.log(result);
-				for(var i =0; i<result.length;i++){
-					var str = "<div class=\"reply\">"
-					str += result[i].content+"</div></hr>"
-					$("#reply").append(str);
-				}
-			},
-			error : function(result) {
-				complate : function(){
+			url: '/usr/reactionPoint/doGoodReaction',
+			type: 'POST',
+			data: {relTypeCode: 'reply', relId: articleId},
+			dataType: 'json',
+			success: function(data){
+				console.log(data);
+				console.log('data.data1Name : ' + data.data1Name);
+				console.log('data.data1 : ' + data.data1);
+				console.log('data.data2Name : ' + data.data2Name);
+				console.log('data.data2 : ' + data.data2);
+				if(data.resultCode.startsWith('S-')){
+					var likeButton2 = $('#likeButton2');
+					var likeCount2 = $('#likeCount2');
+					var DislikeButton2 = $('#DislikeButton2');
+					var DislikeCount2 = $('#DislikeCount2');
 					
+					if(data.resultCode == 'S-1'){
+						likeButton2.toggleClass('btn-outline');
+						likeCount2.text(data.data1);
+					}else if(data.resultCode == 'S-2'){
+						DislikeButton2.toggleClass('btn-outline');
+						DislikeCount2.text(data.data2);
+						likeButton2.toggleClass('btn-outline');
+						likeCount2.text(data.data1);
+					}else {
+						likeButton2.toggleClass('btn-outline');
+						likeCount2.text(data.data1);
+					}
+					
+				}else {
+					alert(data.msg);
 				}
+		    
+			},
+			error: function(jqXHR,textStatus,errorThrown) {
+				alert('좋아요 오류 발생 : ' + textStatus);
+
 			}
-		})
-	} */
+			
+		});
+	}
+	
+	
+		function doBadReaction2(articleId) {
+			if(isNaN(params.memberId) == true){
+				if(confirm('로그인 해야해. 로그인 페이지로 가실???')){
+					var currentUri = encodeURIComponent(window.location.href);
+					window.location.href = '../member/login?afterLoginUri=' + currentUri; // 로그인 페이지에 원래 페이지의 uri를 같이 보냄
+				}
+				return;
+			}
+			
+			$.ajax({
+				url: '/usr/reactionPoint/doBadReaction',
+				type: 'POST',
+				data: {relTypeCode: 'reply', relId: articleId},
+				dataType: 'json',
+				success: function(data){
+					console.log(data);
+					console.log('data.data1Name : ' + data.data1Name);
+					console.log('data.data1 : ' + data.data1);
+					console.log('data.data2Name : ' + data.data2Name);
+					console.log('data.data2 : ' + data.data2);
+					if(data.resultCode.startsWith('S-')){
+						var likeButton2 = $('#likeButton2');
+						var likeCount2 = $('#likeCount2');
+						var DislikeButton2 = $('#DislikeButton2');
+						var DislikeCount2 = $('#DislikeCount2');
+						
+						if(data.resultCode == 'S-1'){
+							likeButton2.toggleClass('btn-outline');
+							likeCount2.text(data.data1);
+						}else if(data.resultCode == 'S-2'){
+							DislikeButton2.toggleClass('btn-outline');
+							DislikeCount2.text(data.data2);
+							likeButton2.toggleClass('btn-outline');
+							likeCount2.text(data.data1);
+						}else {
+							likeButton2.toggleClass('btn-outline');
+							likeCount2.text(data.data1);
+						}
+						
+					}else {
+						alert(data.msg);
+					}
+			    
+				},
+				error: function(jqXHR,textStatus,errorThrown) {
+					alert('좋아요 오류 발생 : ' + textStatus);
+
+				}
+				
+			});
+		}
 	
 	
 	
 	
 	$(function() {
 		checkRP();
+	});
+	
+	$(function() {
+		checkRP2();
 	});
 </script>
 
@@ -297,9 +414,9 @@
 					<td>${replies.badReactionPoint }</td>
 					<td>
 						<!-- href="/usr/reactionPoint/doGoodReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.currentUri}" -->
-						<button id="likeButton" class="btn btn-outline btn-success" onclick="doGoodReaction(${param.id})">좋아요</button>
+						<button id="likeButton2" class="btn btn-outline btn-success" onclick="doGoodReaction2(${param.id})">좋아요</button>
 
-						<button id="DislikeButton" class="btn btn-outline btn-error" onclick="doBadReaction(${param.id})">싫어요</button>
+						<button id="DislikeButton2" class="btn btn-outline btn-error" onclick="doBadReaction2(${param.id})">싫어요</button>
 					</td>
 					<td><a class="btn btn-outline" href="../reply/modify?id=${reply.id }">수정</a></td>
 				</tr>
@@ -313,11 +430,12 @@
 <div class="card my-4">
 	<h5 class="card-header">Leave a Comment:</h5>
 	<div class="card-body">
-		<form name="comment-form" action="../reply/doWriteReply" method="post" autocomplete="off">
+		<form action="../reply/doWriteReply" method="POST" onsubmit="ReplyWrite__submit(this); return false;">
 			<div class="form-group">
 				<input type="hidden" name="memberId" value="${loginedMemberId }" /> <input type="hidden" name="relTypeCode"
 					value="article" /> <input type="hidden" name="relId" value="${article.id }" />
-				<textarea name="body" class="form-control"></textarea>
+				<textarea class="input input-bordered input-primary w-full max-w-xs" autocomplete="off" type="text"
+					placeholder="내용을 입력해주세요" name="body"> </textarea>
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>

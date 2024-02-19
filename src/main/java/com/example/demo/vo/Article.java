@@ -18,6 +18,7 @@ public class Article {
 	private int goodReactionPoint;
 	private int badReactionPoint;
 
+	private int extra__repliesCnt;
 	private String extra__writer;
 
 	private boolean userCanModify;

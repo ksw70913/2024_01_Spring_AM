@@ -34,7 +34,7 @@ public class UsrReactionPointController {
 
 		if (usersReaction == 1) {
 			ResultData rd = reactionPointService.deleteGoodReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			int goodRP = articleService.getGoodRP(relId);
+			int goodRP = articleService.getGoodRP(relId); 
 			int badRP = articleService.getBadRP(relId);
 			return ResultData.from("S-1", "좋아요 취소", "goodRP", goodRP, "badRP", badRP);
 		} else if (usersReaction == -1) {
