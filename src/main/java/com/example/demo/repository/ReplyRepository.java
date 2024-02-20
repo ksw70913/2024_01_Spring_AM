@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.example.demo.vo.Reply;
 
@@ -35,5 +36,22 @@ public interface ReplyRepository {
 
 	@Select("SELECT LAST_INSERT_ID()")
 	public int getLastInsertId();
+
+	@Select("""
+			SELECT *
+			FROM reply
+			WHERE id = #{id}
+			""")
+	Reply getReply(int id);
+
+	@Update("""
+			UPDATE reply
+				<set>
+					<if test="body != null and body != ''">`body` = #{body},</if>
+					updateDate = NOW()
+				</set>
+			WHERE id = #{id}
+				""")
+	void modifyReply(int id, String body);
 
 }

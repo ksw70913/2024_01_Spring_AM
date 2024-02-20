@@ -158,12 +158,12 @@ public class ArticleService {
 		return ResultData.from("S-1", "싫어요 감소", "affectedRow", affectedRow);
 	}
 
-	public int getGoodRP(String relTypeCode2, int relId) {
-		return articleRepository.getGoodRP(relTypeCode2, relId);
+	public int getGoodRP(int relId) {
+		return articleRepository.getGoodRP(relId);
 	}
 
-	public int getBadRP(String relTypeCode2, int relId) {
-		return articleRepository.getBadRP(relTypeCode2, relId);
+	public int getBadRP(int relId) {
+		return articleRepository.getBadRP(relId);
 	}
 
 }

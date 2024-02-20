@@ -190,16 +190,16 @@ public interface ArticleRepository {
 
 	@Select("""
 			SELECT goodReactionPoint
-			FROM #{relTypeCode}
+			FROM article
 			WHERE id = #{relId}
 			""")
-	public int getGoodRP(String relTypeCode2, int relId);
+	public int getGoodRP(int relId);
 
 	@Select("""
 			SELECT badReactionPoint
-			FROM #{relTypeCode}
+			FROM article
 			WHERE id = #{relId}
 			""")
-	public int getBadRP(String relTypeCode2, int relId);
+	public int getBadRP(int relId);
 
 }

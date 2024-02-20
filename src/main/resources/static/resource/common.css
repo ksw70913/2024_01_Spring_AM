@@ -78,3 +78,7 @@ header>div>ul>li>ul {
 header>div>ul>li:hover>ul {
 	display: block;
 }
+
+.hidden {
+	display: none;
+}
