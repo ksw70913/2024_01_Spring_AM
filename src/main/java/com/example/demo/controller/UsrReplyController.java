@@ -66,10 +66,35 @@ public class UsrReplyController {
 		ResultData loginedMemberCanModifyRd = replyService.userCanModify(rq.getLoginedMemberId(), reply);
 
 		if (loginedMemberCanModifyRd.isSuccess()) {
+			if (body.equals("")) {
+				return Ut.jsHistoryBack("F-1", Ut.f("수정할 댓글이 빈 공간입니다."));
+			}
 			replyService.modifyReply(id, body);
 		}
 
 		return Ut.jsReplace(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg(),
+				"../article/detail?id=" + relId);
+	}
+
+	@RequestMapping("/usr/reply/doDelete")
+	@ResponseBody
+	public String doModifyReply(HttpServletRequest req, int id, int relId) {
+
+		Rq rq = (Rq) req.getAttribute("rq");
+
+		Reply reply = replyService.getReply(id);
+
+		if (reply == null) {
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 댓글은 존재하지 않습니다", id));
+		}
+
+		ResultData loginedMemberCanDeleteRd = replyService.userCanDelete(rq.getLoginedMemberId(), reply);
+
+		if (loginedMemberCanDeleteRd.isSuccess()) {
+			replyService.deleteArticle(id);
+		}
+
+		return Ut.jsReplace(loginedMemberCanDeleteRd.getResultCode(), loginedMemberCanDeleteRd.getMsg(),
 				"../article/detail?id=" + relId);
 	}
 }

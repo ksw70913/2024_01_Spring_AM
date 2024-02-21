@@ -75,4 +75,8 @@ public class ReplyService {
 		replyRepository.modifyReply(id, body);
 	}
 
+	public void deleteArticle(int id) {
+		replyRepository.deleteArticle(id);
+	}
+
 }

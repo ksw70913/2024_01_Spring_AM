@@ -334,7 +334,8 @@ function toggleModifyForm(replyId) {
 								<button id="modifyButton_${reply.id}" class="btn btn-outline" onclick="toggleModifyForm('${reply.id}')">Modify</button>
 							</c:if></td>
 						<td><c:if test="${reply.userCanDelete}">
-								<button class="btn btn-outline" onclick="confirmDelete(${reply.id})">삭제</button>
+								<a class="btn btn-outline" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;"
+									href="../reply/doDelete?relId=${article.id }&id=${reply.id}">삭제</a>
 							</c:if></td>
 					</tr>
 					<td colspan="7">
