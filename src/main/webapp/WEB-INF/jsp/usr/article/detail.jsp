@@ -198,18 +198,14 @@
 	</script>
 <!-- 수정 -->
 <script>
-	function toggleModifyForm(replyId) {
-	    var form = document.getElementById(`modifyForm_${replyId}`);
-	    if (form) {
-	        if (form.classList.contains('hidden')) {
-	            form.classList.remove('hidden');
-	        } else {
-	            form.classList.add('hidden');
-	        }
-	    } else {
-	        console.error(`Element with ID modifyForm_${replyId} not found.`);
-	    }
-	}
+function toggleModifyForm(replyId) {
+    var modificationForm = document.getElementById("modificationForm_" + replyId);
+    if (modificationForm.classList.contains("hidden")) {
+        modificationForm.classList.remove("hidden");
+    } else {
+        modificationForm.classList.add("hidden");
+    }
+}
 	
 	
 	</script>
@@ -335,21 +331,30 @@
 							<button id="dislikeButton_${reply.id}" class="btn btn-outline btn-error" onclick="doBadReaction2('${reply.id}')">싫어요</button>
 						</td>
 						<td><c:if test="${reply.userCanModify}">
-								<button id="modifyButton_${reply.id}" class="btn btn-outline" onclick="toggleModifyForm('${reply.id}')">수정</button>
+								<button id="modifyButton_${reply.id}" class="btn btn-outline" onclick="toggleModifyForm('${reply.id}')">Modify</button>
 							</c:if></td>
 						<td><c:if test="${reply.userCanDelete}">
 								<button class="btn btn-outline" onclick="confirmDelete(${reply.id})">삭제</button>
 							</c:if></td>
 					</tr>
-					<tr id="modifyFormRow_${reply.id}" class="hidden">
-						<td colspan="7">
-							<form id="modifyForm_${reply.id}" action="../reply/doModify" method="POST">
-								<textarea id="modifyTextArea_${reply.id}" rows="3" cols="50"></textarea>
-								<br>
-								<button class="btn btn-primary" onclick="submitModification('${reply.id}')">수정 완료</button>
-							</form>
-						</td>
-					</tr>
+					<td colspan="7">
+						<form id="modificationForm_${reply.id}" class="hidden" action="../reply/doModifyReply" method="POST">
+							<input type="hidden" name="id" value="${reply.id }" /> <input type="hidden" name="relId" value="${article.id }" />
+							<table class="write-box table-box-1" border="1">
+								<tbody>
+									<tr>
+										<th>내용</th>
+										<td><textarea class="input input-bordered input-primary w-full max-w-xs" autocomplete="off" type="text"
+												placeholder="${reply.body}" name="body"></textarea></td>
+									</tr>
+									<tr>
+										<th></th>
+										<td><input class="btn btn-outline btn-info" type="submit" value="댓글 수정" /></td>
+									</tr>
+								</tbody>
+							</table>
+						</form>
+					</td>
 				</c:forEach>
 			</tbody>
 		</table>

@@ -46,10 +46,8 @@ public interface ReplyRepository {
 
 	@Update("""
 			UPDATE reply
-				<set>
-					<if test="body != null and body != ''">`body` = #{body},</if>
-					updateDate = NOW()
-				</set>
+			set `body` = #{body},
+			updateDate = NOW()
 			WHERE id = #{id}
 				""")
 	void modifyReply(int id, String body);

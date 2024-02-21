@@ -53,7 +53,7 @@ public class UsrReplyController {
 
 	@RequestMapping("/usr/reply/doModifyReply")
 	@ResponseBody
-	public String doModifyReply(HttpServletRequest req, int id, String body) {
+	public String doModifyReply(HttpServletRequest req, int relId, int id, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
@@ -70,6 +70,6 @@ public class UsrReplyController {
 		}
 
 		return Ut.jsReplace(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg(),
-				"../article/detail?id=" + id);
+				"../article/detail?id=" + relId);
 	}
 }
