@@ -79,4 +79,12 @@ public class ReplyService {
 		replyRepository.deleteArticle(id);
 	}
 
+	public int getGoodRP(int relId) {
+		return replyRepository.getGoodRP(relId);
+	}
+
+	public int getBadRP(int relId) {
+		return replyRepository.getBadRP(relId);
+	}
+
 }

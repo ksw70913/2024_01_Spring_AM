@@ -55,5 +55,20 @@ public interface ReplyRepository {
 
 	@Delete("DELETE FROM reply WHERE id = #{id}")
 	void deleteArticle(int id);
+	
+	
+	@Select("""
+			SELECT goodReactionPoint
+			FROM reply
+			WHERE id = #{relId}
+			""")
+	int getGoodRP(int relId);
+	
+	@Select("""
+			SELECT badReactionPoint
+			FROM reply
+			WHERE id = #{relId}
+			""")
+	int getBadRP(int relId);
 
 }

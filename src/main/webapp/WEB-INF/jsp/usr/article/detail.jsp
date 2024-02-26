@@ -172,6 +172,132 @@
 	});
 </script>
 
+<!--댓글 좋아요 싫어요  -->
+<script>
+function checkRP2() {
+	if(isAlreadyAddGoodRp2 == true){
+		$('#likeButton2').toggleClass('btn-outline');
+	}else if(isAlreadyAddBadRp2 == true){
+		$('#DislikeButton2').toggleClass('btn-outline');
+	}else {
+		return;
+	}
+	
+	function doGoodReaction2(replyId) {
+		if(isNaN(params.memberId) == true){
+			if(confirm('로그인 해야해. 로그인 페이지로 가실???')){
+				var currentUri = encodeURIComponent(window.location.href);
+				window.location.href = '../member/login?afterLoginUri=' + currentUri; // 로그인 페이지에 원래 페이지의 uri를 같이 보냄
+			}
+			return;
+		}
+		
+		$.ajax({
+			url: '/usr/reactionPoint/doGoodReaction2',
+			type: 'POST',
+			data: {relTypeCode: 'reply', relId: replyId},
+			dataType: 'json',
+			success: function(data){
+				console.log(data);
+				console.log('data.data1Name : ' + data.data1Name);
+				console.log('data.data1 : ' + data.data1);
+				console.log('data.data2Name : ' + data.data2Name);
+				console.log('data.data2 : ' + data.data2);
+				if(data.resultCode.startsWith('S-')){
+					var likeButton2 = $('#likeButton2');
+					var likeCount2 = $('#likeCount2');
+					var DislikeButton2 = $('#DislikeButton2');
+					var DislikeCount2 = $('#DislikeCount2');
+					
+					if(data.resultCode == 'S-1'){
+						likeButton2.toggleClass('btn-outline');
+						likeCount2.text(data.data1);
+					}else if(data.resultCode == 'S-2'){
+						DislikeButton2.toggleClass('btn-outline');
+						DislikeCount2.text(data.data2);
+						likeButton2.toggleClass('btn-outline');
+						likeCount2.text(data.data1);
+					}else {
+						likeButton2.toggleClass('btn-outline');
+						likeCount2.text(data.data1);
+					}
+					
+				}else {
+					alert(data.msg);
+				}
+		
+			},
+			error: function(jqXHR,textStatus,errorThrown) {
+				alert('좋아요 오류 발생 : ' + textStatus);
+
+			}
+			
+		});
+	}
+	
+	
+	
+	function doBadReaction2(replyId) {
+		
+		if(isNaN(params.memberId) == true){
+			if(confirm('로그인 해야해. 로그인 페이지로 가실???')){
+				var currentUri = encodeURIComponent(window.location.href);
+				window.location.href = '../member/login?afterLoginUri=' + currentUri; // 로그인 페이지에 원래 페이지의 uri를 같이 보냄
+			}
+			return;
+		}
+		
+	 $.ajax({
+			url: '/usr/reactionPoint/doBadReaction2',
+			type: 'POST',
+			data: {relTypeCode: 'reply', relId: replyId},
+			dataType: 'json',
+			success: function(data){
+				console.log(data);
+				console.log('data.data1Name : ' + data.data1Name);
+				console.log('data.data1 : ' + data.data1);
+				console.log('data.data2Name : ' + data.data2Name);
+				console.log('data.data2 : ' + data.data2);
+				if(data.resultCode.startsWith('S-')){
+					var likeButton2 = $('#likeButton2');
+					var likeCount2 = $('#likeCount2');
+					var DislikeButton2 = $('#DislikeButton2');
+					var DislikeCount2 = $('#DislikeCount2');
+					
+					if(data.resultCode == 'S-1'){
+						DislikeButton2.toggleClass('btn-outline');
+						DislikeCount2.text(data.data2);
+					}else if(data.resultCode == 'S-2'){
+						likeButton2.toggleClass('btn-outline');
+						likeCount2.text(data.data1);
+						DislikeButton2.toggleClass('btn-outline');
+						DislikeCount2.text(data.data2);
+		
+					}else {
+						DislikeButton2.toggleClass('btn-outline');
+						DislikeCount2.text(data.data2);
+					}
+			
+				}else {
+					alert(data.msg);
+				}
+			},
+			error: function(jqXHR,textStatus,errorThrown) {
+				alert('싫어요 오류 발생 : ' + textStatus);
+			}
+			
+		});
+	}
+	
+	
+	$(function() {
+		checkRP2();
+	});
+}
+
+
+</script>
+
 <!-- 댓글 -->
 <script>
 		var ReplyWrite__submitDone = false;
@@ -324,11 +450,12 @@ function toggleModifyForm(replyId) {
 						<td>${reply.regDate.substring(0, 10)}</td>
 						<td>${reply.memberId}</td>
 						<td>${reply.body}</td>
-						<td>${reply.goodReactionPoint}</td>
-						<td>${reply.badReactionPoint}</td>
+						<td>${reply.extra__writer }</td>
+						<td id="likeCount2">${reply.goodReactionPoint}</td>
+						<td id="DislikeCount2">${reply.badReactionPoint}</td>
 						<td>
-							<button id="likeButton_${reply.id}" class="btn btn-outline btn-success" onclick="doGoodReaction2('${reply.id}')">좋아요</button>
-							<button id="dislikeButton_${reply.id}" class="btn btn-outline btn-error" onclick="doBadReaction2('${reply.id}')">싫어요</button>
+							<button id="likeButton2" class="btn btn-outline btn-success" onclick="doGoodReaction2('${param.id}')">좋아요</button>
+							<button id="DislikeButton2" class="btn btn-outline btn-error" onclick="doBadReaction2('${param.id}')">싫어요</button>
 						</td>
 						<td><c:if test="${reply.userCanModify}">
 								<button id="modifyButton_${reply.id}" class="btn btn-outline" onclick="toggleModifyForm('${reply.id}')">Modify</button>
@@ -337,25 +464,26 @@ function toggleModifyForm(replyId) {
 								<a class="btn btn-outline" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;"
 									href="../reply/doDelete?relId=${article.id }&id=${reply.id}">삭제</a>
 							</c:if></td>
+
+						<td colspan="7">
+							<form id="modificationForm_${reply.id}" class="hidden" action="../reply/doModifyReply" method="POST">
+								<input type="hidden" name="id" value="${reply.id }" /> <input type="hidden" name="relId" value="${article.id }" />
+								<table class="write-box table-box-1" border="1">
+									<tbody>
+										<tr>
+											<th>내용</th>
+											<td><textarea class="input input-bordered input-primary w-full max-w-xs" autocomplete="off" type="text"
+													placeholder="${reply.body}" name="body"></textarea></td>
+										</tr>
+										<tr>
+											<th></th>
+											<td><input class="btn btn-outline btn-info" type="submit" value="댓글 수정" /></td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+						</td>
 					</tr>
-					<td colspan="7">
-						<form id="modificationForm_${reply.id}" class="hidden" action="../reply/doModifyReply" method="POST">
-							<input type="hidden" name="id" value="${reply.id }" /> <input type="hidden" name="relId" value="${article.id }" />
-							<table class="write-box table-box-1" border="1">
-								<tbody>
-									<tr>
-										<th>내용</th>
-										<td><textarea class="input input-bordered input-primary w-full max-w-xs" autocomplete="off" type="text"
-												placeholder="${reply.body}" name="body"></textarea></td>
-									</tr>
-									<tr>
-										<th></th>
-										<td><input class="btn btn-outline btn-info" type="submit" value="댓글 수정" /></td>
-									</tr>
-								</tbody>
-							</table>
-						</form>
-					</td>
 				</c:forEach>
 			</tbody>
 		</table>
