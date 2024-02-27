@@ -15,12 +15,16 @@
 					</tr>
 					<tr>
 						<th>비밀번호</th>
-						<td><input class="input input-bordered input-primary w-full max-w-xs" autocomplete="off" type="text"
-							placeholder="비밀번호를 입력해주세요" name="loginPw" /></td>
+						<td>
+							<input class="input input-bordered input-primary w-full max-w-xs" autocomplete="off" type="text"
+								placeholder="비밀번호를 입력해주세요" name="loginPw" />
+						</td>
 					</tr>
 					<tr>
 						<th></th>
-						<td><input class="btn btn-outline btn-info" type="submit" value="로그인" /></td>
+						<td>
+							<input class="btn btn-outline btn-info" type="submit" value="확인" />
+						</td>
 					</tr>
 				</tbody>
 			</table>
