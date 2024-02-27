@@ -39,11 +39,17 @@ public interface ReplyRepository {
 	public int getLastInsertId();
 
 	@Select("""
-			SELECT *
-			FROM reply
-			WHERE id = #{id}
+				SELECT R.*
+				FROM reply AS R
+				WHERE R.id = #{id}
 			""")
 	Reply getReply(int id);
+
+	@Delete("""
+				DELETE FROM reply
+				WHERE id = #{id}
+			""")
+	void deleteReply(int id);
 
 	@Update("""
 			UPDATE reply
@@ -51,24 +57,6 @@ public interface ReplyRepository {
 			updateDate = NOW()
 			WHERE id = #{id}
 				""")
-	void modifyReply(int id, String body);
-
-	@Delete("DELETE FROM reply WHERE id = #{id}")
-	void deleteArticle(int id);
-	
-	
-	@Select("""
-			SELECT goodReactionPoint
-			FROM reply
-			WHERE id = #{relId}
-			""")
-	int getGoodRP(int relId);
-	
-	@Select("""
-			SELECT badReactionPoint
-			FROM reply
-			WHERE id = #{relId}
-			""")
-	int getBadRP(int relId);
+	public void modifyReply(int id, String body);
 
 }

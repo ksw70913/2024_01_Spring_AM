@@ -38,10 +38,6 @@ public class ReplyService {
 		return ResultData.from("S-1", Ut.f("%d번 댓글이 생성되었습니다", id), "id", id);
 	}
 
-	public Reply getReply(int id) {
-		return replyRepository.getReply(id);
-	}
-
 	private void controlForPrintData(int loginedMemberId, Reply reply) {
 		if (reply == null) {
 			return;
@@ -71,20 +67,16 @@ public class ReplyService {
 		return ResultData.from("S-1", Ut.f("%d번 댓글을 수정했습니다", reply.getId()));
 	}
 
+	public Reply getReply(int id) {
+		return replyRepository.getReply(id);
+	}
+
+	public ResultData deleteReply(int id) {
+		replyRepository.deleteReply(id);
+		return ResultData.from("S-1", Ut.f("%d번 댓글을 삭제했습니다", id));
+	}
+
 	public void modifyReply(int id, String body) {
 		replyRepository.modifyReply(id, body);
 	}
-
-	public void deleteArticle(int id) {
-		replyRepository.deleteArticle(id);
-	}
-
-	public int getGoodRP(int relId) {
-		return replyRepository.getGoodRP(relId);
-	}
-
-	public int getBadRP(int relId) {
-		return replyRepository.getBadRP(relId);
-	}
-
 }
