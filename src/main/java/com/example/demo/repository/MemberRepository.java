@@ -1,7 +1,9 @@
 package com.example.demo.repository;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.example.demo.vo.Member;
 
@@ -22,18 +24,18 @@ public interface MemberRepository {
 			""")
 	public Member getMemberByNameAndEmail(String name, String email);
 
-//	@Insert("""
-//			INSERT INTO
-//			`member` SET
-//			regDate = NOW(),
-//			updateDate = NOW(),
-//			loginId = #{loginId},
-//			loginPw = #{loginPw},
-//			`name` = #{name},
-//			nickname = #{nickname},
-//			cellphoneNum = #{cellphoneNum},
-//			email = #{email}
-//			""")
+	@Insert("""
+			INSERT INTO
+			`member` SET
+			regDate = NOW(),
+			updateDate = NOW(),
+			loginId = #{loginId},
+			loginPw = #{loginPw},
+			`name` = #{name},
+			nickname = #{nickname},
+			cellphoneNum = #{cellphoneNum},
+			email = #{email}
+			""")
 	public void join(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email);
 
 	@Select("SELECT LAST_INSERT_ID()")
@@ -42,26 +44,54 @@ public interface MemberRepository {
 	@Select("SELECT * FROM `member` WHERE id = #{id}")
 	public Member getMember(int id);
 
-	@Select("""
-			SELECT count(*)
-			FROM `member`
-			WHERE loginId = #{loginId}
+	@Update("""
+			<script>
+			UPDATE `member`
+			<set>
+				<if test="loginPw != null">
+					loginPw = #{loginPw},
+				</if>
+				<if test="name != null">
+					name = #{name},
+				</if>
+				<if test="nickname != null">
+					nickname = #{nickname},
+				</if>
+				<if test="cellphoneNum != null">
+					cellphoneNum = #{cellphoneNum},
+				</if>
+				<if test="email != null">
+					email = #{email},
+				</if>
+				updateDate= NOW()
+			</set>
+			WHERE id = #{loginedMemberId}
+			</script>
 			""")
-	public int checkLoginId(String loginId);
+	public void modify(int loginedMemberId, String loginPw, String name, String nickname, String cellphoneNum,
+			String email);
 
-	@Select("""
-			SELECT loginPw
-			FROM `member`
-			WHERE loginId = #{loginId}
+	@Update("""
+			<script>
+			UPDATE `member`
+			<set>
+				<if test="name != null">
+					name = #{name},
+				</if>
+				<if test="nickname != null">
+					nickname = #{nickname},
+				</if>
+				<if test="cellphoneNum != null">
+					cellphoneNum = #{cellphoneNum},
+				</if>
+				<if test="email != null">
+					email = #{email},
+				</if>
+				updateDate= NOW()
+			</set>
+			WHERE id = #{loginedMemberId}
+			</script>
 			""")
-	public String checkLoginPw(String loginId);
-
-	@Select("""
-			SELECT *
-			FROM `member`
-			WHERE loginId = #{loginId}
-			AND loginPw = #{loginPw}
-			""")
-	public Member getMemberRow(String loginId, String loginPw);
+	public void modifyWithoutPw(int loginedMemberId, String name, String nickname, String cellphoneNum, String email);
 
 }
